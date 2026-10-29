@@ -3,4 +3,6 @@ export interface Chapter {
   title: string;
   description: string;
   movieIds: string[];
+  order?: number;
+  subtitle?: string;
 }

@@ -1,0 +1,25 @@
+warning: in the working copy of 'app/data/chapters.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/data/events.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/data/journeys.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/data/movies.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/data/series.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/globals.css', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/layout.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/lib/journey.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/types/chapter.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/types/journey.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/types/movie.ts', LF will be replaced by CRLF the next time Git touches it
+ app/data/chapters.ts | 127 [32m++++++++++++++++++++++[m[31m-[m
+ app/data/events.ts   |  57 [32m++++++++++[m[31m-[m
+ app/data/journeys.ts | 116 [32m++++++++++++++++++++[m[31m-[m
+ app/data/movies.ts   | 280 [32m++++++++++++++++++++++++++++++++++++++++++++++++++[m[31m-[m
+ app/data/series.ts   |   5 [32m+[m[31m-[m
+ app/globals.css      | 214 [32m+++++++++++++++++++++++++++++++++++++[m[31m--[m
+ app/layout.tsx       |  35 [32m++++++[m[31m-[m
+ app/lib/journey.ts   | 178 [32m++++++++++++++++++++++++++++++++[m
+ app/page.tsx         |  22 [32m+++[m[31m-[m
+ app/types/chapter.ts |   2 [32m+[m
+ app/types/journey.ts |   6 [32m++[m
+ app/types/movie.ts   |  13 [32m++[m[31m-[m
+ 12 files changed, 1026 insertions(+), 29 deletions(-)

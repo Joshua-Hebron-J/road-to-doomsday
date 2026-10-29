@@ -1,26 +1,218 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Surface Layers (Obsidian / Dark Matter) */
+  --background: #050508;
+  --foreground: #f8fafc;
+  --surface-0: #050508;
+  --surface-1: #0a0c10;
+  --surface-2: #12151d;
+  --surface-3: #1a1e28;
+  --surface-4: #242938;
+
+  /* Latverian Emerald Palette */
+  --doom-emerald-300: #6ee7b7;
+  --doom-emerald-400: #34d399;
+  --doom-emerald: #10b981;
+  --doom-emerald-600: #059669;
+  --doom-emerald-dark: #047857;
+  --doom-emerald-deep: #022c22;
+
+  /* Sovereign Gold / Relic Palette */
+  --doom-gold-300: #fde047;
+  --doom-gold-400: #facc15;
+  --doom-gold: #c59b27;
+  --doom-gold-dark: #a16207;
+  --doom-gold-deep: #422006;
+
+  /* Sovereign Titanium / Silver Palette */
+  --doom-silver-200: #e2e8f0;
+  --doom-silver-300: #cbd5e1;
+  --doom-silver: #94a3b8;
+  --doom-silver-dark: #64748b;
+  --doom-silver-deep: #1e293b;
+
+  /* Multiverse Incursion Anomaly */
+  --doom-incursion-400: #f87171;
+  --doom-incursion: #ef4444;
+  --doom-incursion-dark: #991b1b;
+  --doom-incursion-deep: #450a0a;
+
+  /* Border Tokens */
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-prominent: rgba(255, 255, 255, 0.12);
+  --border-emerald-subtle: rgba(16, 185, 129, 0.25);
+  --border-emerald-glow: rgba(16, 185, 129, 0.5);
+  --border-gold-subtle: rgba(197, 155, 39, 0.3);
+
+  /* Radius Tokens */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-full: 9999px;
+
+  /* Elevation & Glow Shadows */
+  --shadow-glow-emerald: 0 0 35px -8px rgba(16, 185, 129, 0.25);
+  --shadow-glow-emerald-lg: 0 0 50px -5px rgba(16, 185, 129, 0.45);
+  --shadow-glow-gold: 0 0 35px -8px rgba(197, 155, 39, 0.25);
+  --shadow-card-cinematic: 0 8px 32px 0 rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --shadow-card-hover: 0 12px 40px 0 rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(16, 185, 129, 0.35);
+
+  /* Transitions */
+  --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-surface-0: var(--surface-0);
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-surface-4: var(--surface-4);
+
+  --color-doom-emerald-light: var(--doom-emerald-400);
+  --color-doom-emerald: var(--doom-emerald);
+  --color-doom-emerald-dark: var(--doom-emerald-dark);
+  --color-doom-emerald-deep: var(--doom-emerald-deep);
+
+  --color-doom-gold-light: var(--doom-gold-400);
+  --color-doom-gold: var(--doom-gold);
+  --color-doom-gold-dark: var(--doom-gold-dark);
+
+  --color-doom-silver-light: var(--doom-silver-200);
+  --color-doom-silver: var(--doom-silver);
+  --color-doom-silver-dark: var(--doom-silver-dark);
+
+  --color-doom-incursion: var(--doom-incursion);
+  --color-doom-incursion-dark: var(--doom-incursion-dark);
+
+  --font-sans: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+::selection {
+  background-color: rgba(16, 185, 129, 0.35);
+  color: #f8fafc;
+}
+
+/* Subtle cinematic grid coordinate texture */
+.cinematic-grid {
+  background-size: 64px 64px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+}
+
+/* Theatrical typography gradients */
+.text-gradient-silver {
+  background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 55%, #64748b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-emerald {
+  background: linear-gradient(135deg, #a7f3d0 0%, #34d399 50%, #059669 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, #fef08a 0%, #eab308 60%, #a16207 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Restrained ambient glows */
+.glow-emerald {
+  box-shadow: var(--shadow-glow-emerald);
+}
+
+.glow-emerald-lg {
+  box-shadow: var(--shadow-glow-emerald-lg);
+}
+
+.glow-gold {
+  box-shadow: var(--shadow-glow-gold);
+}
+
+.glow-subtle {
+  box-shadow: 0 1px 25px 0 rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+/* Reusable Cinematic Card */
+.card-cinematic {
+  background-color: rgba(18, 21, 29, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card-cinematic);
+}
+
+.card-cinematic-interactive {
+  background-color: rgba(18, 21, 29, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card-cinematic);
+  transition: all 250ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-cinematic-interactive:hover {
+  border-color: rgba(16, 185, 129, 0.35);
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* Reusable Accessible Focus Ring */
+.focus-ring-doom {
+  outline: none;
+}
+.focus-ring-doom:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px rgba(52, 211, 153, 0.9);
+}
+
+/* Custom sleek scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050508;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #047857;
+}
+
+/* Motion Accessibility Overrides */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
