@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { motion, useReducedMotion } from "motion/react";
-import { HeroCanvas } from "./hero-canvas";
-import { Button } from "./ui/button";
-import { Badge } from "./ui/badge";
+import { motion, useReducedMotion } from 'motion/react';
+import { HeroCanvas } from './hero-canvas';
+import { Button } from './ui/button';
+import { Badge } from './ui/badge';
 
 export function Hero() {
   const shouldReduceMotion = useReducedMotion();
 
   const transitionConfig = shouldReduceMotion
     ? { duration: 0 }
-    : { duration: 0.8, ease: "easeOut" as const };
+    : { duration: 0.8, ease: 'easeOut' as const };
 
   return (
     <section
@@ -18,91 +18,108 @@ export function Hero() {
       className="relative min-h-[92vh] flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 pt-28 pb-20 overflow-hidden"
     >
       {/* 3D Multiverse Rift Centerpiece & Atmospheric Lighting */}
-      <HeroCanvas />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 pointer-events-none cinematic-grid bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.13),transparent_65%)]"
+      />
 
       {/* Main Content Container */}
-      <div className="relative z-10 max-w-5xl mx-auto text-center flex flex-col items-center">
-        {/* Pre-title Tagline Badge */}
-        <motion.div
-          initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ ...transitionConfig, delay: 0.1 }}
-          className="mb-8"
-        >
-          <Badge variant="emerald" size="md" dot>
-            Every story led here.
-          </Badge>
-        </motion.div>
+      <div className="relative z-10 max-w-7xl mx-auto w-full text-center flex flex-col items-center">
+        <div className="w-full grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr] items-center gap-8 lg:gap-12">
+          <div className="flex flex-col items-center lg:items-start lg:text-left">
+            {/* Pre-title Tagline Badge */}
+            <motion.div
+              initial={
+                shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 14 }
+              }
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ ...transitionConfig, delay: 0.1 }}
+              className="mb-8"
+            >
+              <Badge variant="emerald" size="md" dot>
+                Every story led here.
+              </Badge>
+            </motion.div>
 
-        {/* Theatrical Main Title */}
-        <motion.div
-          initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ ...transitionConfig, delay: 0.2 }}
-          className="space-y-2 mb-6"
-        >
-          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-[0.14em] sm:tracking-[0.18em] uppercase leading-none select-none">
-            <span className="text-gradient-silver block">THE ROAD TO</span>
-            <span className="text-gradient-emerald block mt-1 drop-shadow-[0_4px_30px_rgba(16,185,129,0.3)]">
-              DOOMSDAY
-            </span>
-          </h1>
-        </motion.div>
+            {/* Theatrical Main Title */}
+            <motion.div
+              initial={
+                shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 20 }
+              }
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ ...transitionConfig, delay: 0.2 }}
+              className="space-y-2 mb-6"
+            >
+              <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-5xl xl:text-6xl font-black tracking-[0.09em] uppercase leading-none select-none">
+                <span className="text-gradient-silver block">THE ROAD TO</span>
+                <span className="text-gradient-emerald block mt-1 drop-shadow-[0_4px_30px_rgba(16,185,129,0.3)]">
+                  DOOMSDAY
+                </span>
+              </h1>
+            </motion.div>
 
-        {/* Cinematic Narrative Premise */}
-        <motion.p
-          initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ ...transitionConfig, delay: 0.3 }}
-          className="max-w-2xl text-base sm:text-lg text-slate-300 font-light leading-relaxed mb-10 text-balance drop-shadow-[0_2px_14px_rgba(0,0,0,0.9)]"
-        >
-          From the fracture of the Sacred Timeline to the inevitable collapse of
-          parallel universes. Follow the essential journey through Marvel&apos;s
-          cinematic history leading to the rise of Victor Von Doom.
-        </motion.p>
+            {/* Cinematic Narrative Premise */}
+            <motion.p
+              initial={
+                shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 16 }
+              }
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ ...transitionConfig, delay: 0.3 }}
+              className="max-w-2xl text-base sm:text-lg text-slate-300 font-light leading-relaxed mb-10 text-balance drop-shadow-[0_2px_14px_rgba(0,0,0,0.9)]"
+            >
+              From the fracture of the Sacred Timeline to the inevitable
+              collapse of parallel universes. Follow the essential journey
+              through Marvel&apos;s cinematic history leading to the rise of
+              Victor Von Doom.
+            </motion.p>
 
-        {/* Action Group CTAs */}
-        <motion.div
-          initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ ...transitionConfig, delay: 0.4 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto"
-        >
-          {/* Primary CTA */}
-          <Button
-            href="/pathways"
-            variant="primary"
-            size="lg"
-            className="w-full sm:w-auto"
-            icon={
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
+            {/* Action Group CTAs */}
+            <motion.div
+              initial={
+                shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 16 }
+              }
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ ...transitionConfig, delay: 0.4 }}
+              className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto"
+            >
+              {/* Primary CTA */}
+              <Button
+                href="/pathways"
+                variant="primary"
+                size="lg"
+                className="w-full sm:w-auto"
+                icon={
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M14 5l7 7m0 0l-7 7m7-7H3"
+                    />
+                  </svg>
+                }
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M14 5l7 7m0 0l-7 7m7-7H3"
-                />
-              </svg>
-            }
-          >
-            Begin Your Journey
-          </Button>
+                Begin Your Journey
+              </Button>
 
-          {/* Secondary CTA */}
-          <Button
-            href="#chronology"
-            variant="secondary"
-            size="lg"
-            className="w-full sm:w-auto"
-          >
-            Explore the Timeline
-          </Button>
-        </motion.div>
+              {/* Secondary CTA */}
+              <Button
+                href="#chronology"
+                variant="secondary"
+                size="lg"
+                className="w-full sm:w-auto"
+              >
+                Explore the Timeline
+              </Button>
+            </motion.div>
+          </div>
+          <HeroCanvas />
+        </div>
 
         {/* Narrative Anchor Markers */}
         <motion.div

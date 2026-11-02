@@ -1,8 +1,10 @@
-"use client";
+'use client';
 
-import { motion, useReducedMotion } from "motion/react";
-import { SectionHeader } from "./ui/section-header";
-import { Badge, BadgeVariant } from "./ui/badge";
+import { useState } from 'react';
+import { motion, useReducedMotion } from 'motion/react';
+import { SpatialTimeline } from './spatial-timeline';
+import { SectionHeader } from './ui/section-header';
+import { Badge, BadgeVariant } from './ui/badge';
 
 interface ChronologyEra {
   phase: string;
@@ -16,39 +18,55 @@ interface ChronologyEra {
 
 const CHRONOLOGY_ERAS: ChronologyEra[] = [
   {
-    phase: "PHASE IV",
-    codename: "TEMPORAL FRACTURES",
-    timeframe: "The Fall of He Who Remains",
-    threatLevel: "CRITICAL — BRANCH DIVERGENCE",
-    threatVariant: "gold",
+    phase: 'PHASE IV',
+    codename: 'TEMPORAL FRACTURES',
+    timeframe: 'The Fall of He Who Remains',
+    threatLevel: 'CRITICAL — BRANCH DIVERGENCE',
+    threatVariant: 'gold',
     synopsis:
-      "The death of the Citadel guardian shatters the Sacred Timeline into infinite competing reality branches. Nexus anomalies trigger the earliest documented dimensional ruptures.",
-    focalEntities: ["Loki & Sylvie", "Doctor Strange", "Wanda Maximoff", "The Watcher"],
+      'The death of the Citadel guardian shatters the Sacred Timeline into infinite competing reality branches. Nexus anomalies trigger the earliest documented dimensional ruptures.',
+    focalEntities: [
+      'Loki & Sylvie',
+      'Doctor Strange',
+      'Wanda Maximoff',
+      'The Watcher',
+    ],
   },
   {
-    phase: "PHASE V",
-    codename: "MULTIVERSAL INVASIONS & INCURSIONS",
-    timeframe: "The Collision of Alternate Earths",
-    threatLevel: "CATASTROPHIC — INCOMING INCURSIONS",
-    threatVariant: "incursion",
+    phase: 'PHASE V',
+    codename: 'MULTIVERSAL INVASIONS & INCURSIONS',
+    timeframe: 'The Collision of Alternate Earths',
+    threatLevel: 'CATASTROPHIC — INCOMING INCURSIONS',
+    threatVariant: 'incursion',
     synopsis:
-      "Realities grind against one another. Quantum realm anomalies and anchor-being collapses destabilize universe lifespans across the broader multiverse.",
-    focalEntities: ["TVA Enforcement", "Deadpool & Wolverine", "Quantum Explorers", "Monica Rambeau"],
+      'Realities grind against one another. Quantum realm anomalies and anchor-being collapses destabilize universe lifespans across the broader multiverse.',
+    focalEntities: [
+      'TVA Enforcement',
+      'Deadpool & Wolverine',
+      'Quantum Explorers',
+      'Monica Rambeau',
+    ],
   },
   {
-    phase: "PHASE VI",
-    codename: "SOVEREIGN CONVERGENCE",
-    timeframe: "The Rise of Latveria & First Steps",
-    threatLevel: "EXISTENTIAL — UNIVERSAL EXTINCTION",
-    threatVariant: "incursion",
+    phase: 'PHASE VI',
+    codename: 'SOVEREIGN CONVERGENCE',
+    timeframe: 'The Rise of Latveria & First Steps',
+    threatLevel: 'EXISTENTIAL — UNIVERSAL EXTINCTION',
+    threatVariant: 'incursion',
     synopsis:
-      "With traditional alliances divided and Earth vulnerable, the Fantastic Four arrive from an alternate retro-futuristic timeline as Doctor Victor Von Doom ascends to command absolute salvation.",
-    focalEntities: ["Victor Von Doom", "The Fantastic Four", "The New Avengers", "The Illuminati"],
+      'With traditional alliances divided and Earth vulnerable, the Fantastic Four arrive from an alternate retro-futuristic timeline as Doctor Victor Von Doom ascends to command absolute salvation.',
+    focalEntities: [
+      'Victor Von Doom',
+      'The Fantastic Four',
+      'The New Avengers',
+      'The Illuminati',
+    ],
   },
 ];
 
 export function TimelinePreview() {
   const shouldReduceMotion = useReducedMotion();
+  const [reveal, setReveal] = useState(false);
 
   return (
     <section
@@ -63,14 +81,21 @@ export function TimelinePreview() {
           description="The chronological progression of escalating threats from the aftermath of the Infinity Saga to the eve of Doomsday."
         />
 
+        <SpatialTimeline
+          reveal={reveal}
+          onReveal={() => setReveal((value) => !value)}
+        />
+
         {/* Timeline Horizon Cards */}
         <div className="relative border-l border-white/10 ml-4 sm:ml-8 md:ml-32 pl-6 sm:pl-10 space-y-12">
           {CHRONOLOGY_ERAS.map((era, index) => (
             <motion.div
               key={era.phase}
-              initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, x: -16 }}
+              initial={
+                shouldReduceMotion ? { opacity: 1 } : { opacity: 0, x: -16 }
+              }
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
+              viewport={{ once: true, margin: '-40px' }}
               transition={{
                 duration: shouldReduceMotion ? 0 : 0.5,
                 delay: shouldReduceMotion ? 0 : index * 0.15,
@@ -91,28 +116,35 @@ export function TimelinePreview() {
                     </span>
                     <span className="text-xs font-mono text-slate-500">•</span>
                     <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">
-                      {era.timeframe}
+                      {reveal ? era.timeframe : 'Narrative briefing protected'}
                     </span>
                   </div>
 
                   <Badge variant={era.threatVariant} size="sm">
-                    {era.threatLevel}
+                    {reveal ? era.threatLevel : 'ARCHIVE BRIEFING'}
                   </Badge>
                 </div>
 
                 <h3 className="text-lg sm:text-xl font-bold uppercase tracking-wider text-slate-100 mb-2">
-                  {era.codename}
+                  {reveal
+                    ? era.codename
+                    : `${era.phase} · Story details protected`}
                 </h3>
 
                 <p className="text-sm text-slate-300 font-light leading-relaxed mb-6">
-                  {era.synopsis}
+                  {reveal
+                    ? era.synopsis
+                    : 'Use the timeline spoiler control above to reveal this era’s narrative briefing.'}
                 </p>
 
                 <div className="pt-4 border-t border-white/5 flex flex-wrap items-center gap-2">
                   <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider mr-2">
                     Key Nexus Figures:
                   </span>
-                  {era.focalEntities.map((entity) => (
+                  {(reveal
+                    ? era.focalEntities
+                    : ['Protected by spoiler shield']
+                  ).map((entity) => (
                     <span
                       key={entity}
                       className="px-2.5 py-1 rounded bg-surface-1 border border-white/5 text-xs text-slate-300 font-mono select-none"

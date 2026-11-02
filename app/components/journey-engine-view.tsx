@@ -1,35 +1,61 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useRef } from "react";
-import Link from "next/link";
-import { motion, useReducedMotion } from "motion/react";
-import { Journey } from "../types/journey";
-import { Chapter } from "../types/chapter";
-import { Movie } from "../types/movie";
-import { Badge, BadgeVariant } from "./ui/badge";
-import { Button } from "./ui/button";
-import { useWatchProgress } from "../hooks/use-watch-progress";
-import {
-  getAllJourneys,
-  getChapterMovies,
-  isMoviePrerequisitesMet,
-  getMovieById,
-} from "../lib/journey";
+import { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
+import dynamic from 'next/dynamic';
+import { ChapterAtlas } from './chapter-atlas';
+import { motion, useReducedMotion } from 'motion/react';
+import { Journey } from '../types/journey';
+import { Chapter } from '../types/chapter';
+import { Badge, BadgeVariant } from './ui/badge';
+import { Button } from './ui/button';
+import { useWatchProgress } from '../hooks/use-watch-progress';
+import { getAllJourneys, getChapterMovies, getMovieById } from '../lib/journey';
+
+const MovieDossier = dynamic(() => import('./movie-dossier'));
 
 interface JourneyEngineViewProps {
   journey: Journey;
   chapters: Chapter[];
 }
 
-export function JourneyEngineView({ journey, chapters }: JourneyEngineViewProps) {
+export function JourneyEngineView({
+  journey,
+  chapters,
+}: JourneyEngineViewProps) {
   const allJourneys = getAllJourneys();
+  const [dossierId, setDossierId] = useState<string | null>(null);
+  const dossierTrigger = useRef<HTMLElement | null>(null);
+  function openDossier(id: string) {
+    dossierTrigger.current =
+      document.activeElement instanceof HTMLElement
+        ? document.activeElement
+        : null;
+    setDossierId(id);
+  }
+  function closeDossier() {
+    setDossierId(null);
+    if (dossierTrigger.current?.isConnected)
+      dossierTrigger.current.focus({ preventScroll: true });
+    else
+      document
+        .getElementById(`${chapters[0]?.id}-trigger`)
+        ?.focus({ preventScroll: true });
+  }
+  const [spoilerShield, setSpoilerShield] = useState(true);
+  const [revealedIds, setRevealedIds] = useState<string[]>([]);
+  const [openChapters, setOpenChapters] = useState<string[]>(
+    [chapters[0]?.id].filter(Boolean),
+  );
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const canReveal = (id: string) =>
+    !spoilerShield || isWatched(id) || revealedIds.includes(id);
   const shouldReduceMotion = useReducedMotion();
   const [showResetModal, setShowResetModal] = useState(false);
   const resetTriggerRef = useRef<HTMLButtonElement | null>(null);
-  const modalConfirmRef = useRef<HTMLButtonElement | null>(null);
+  const modalCancelRef = useRef<HTMLButtonElement | null>(null);
 
   const {
-    watchedIds,
     isLoaded,
     isWatched,
     toggleWatched,
@@ -41,58 +67,74 @@ export function JourneyEngineView({ journey, chapters }: JourneyEngineViewProps)
     storageError,
   } = useWatchProgress(journey.id);
 
-  // Close reset modal on Escape key
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && showResetModal) {
-        setShowResetModal(false);
-        resetTriggerRef.current?.focus();
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [showResetModal]);
-
-  // Focus confirm button when modal opens
   useEffect(() => {
     if (showResetModal) {
-      modalConfirmRef.current?.focus();
+      dialogRef.current?.showModal();
+      modalCancelRef.current?.focus();
+    } else {
+      dialogRef.current?.close();
     }
   }, [showResetModal]);
+
+  function openChapter(chapterId: string) {
+    setOpenChapters((ids) =>
+      ids.includes(chapterId) ? ids : [...ids, chapterId],
+    );
+    const trigger = document.getElementById(`${chapterId}-trigger`);
+    trigger?.focus({ preventScroll: true });
+    trigger?.scrollIntoView({
+      behavior: shouldReduceMotion ? 'instant' : 'smooth',
+      block: 'start',
+    });
+  }
+  function openMovieChapter(movieId: string) {
+    const chapter = chapters.find((item) => item.movieIds.includes(movieId));
+    if (chapter) openChapter(chapter.id);
+  }
+
+  function closeResetDialog(reset = false) {
+    dialogRef.current?.close();
+    setShowResetModal(false);
+    if (reset) document.getElementById(`${chapters[0]?.id}-trigger`)?.focus();
+    else resetTriggerRef.current?.focus();
+  }
 
   // Theme styling based on journey
   const getThemeDetails = () => {
     switch (journey.id) {
-      case "the-doom-essential":
+      case 'the-doom-essential':
         return {
-          badgeVariant: "emerald" as BadgeVariant,
+          badgeVariant: 'emerald' as BadgeVariant,
           quote:
             "“Order must be forged from chaos. The failure of Stark's defenders demands sovereign intervention.”",
-          codename: "ALPHA DIRECTIVE // RECON-01",
-          borderGlow: "border-emerald-500/40 shadow-[0_0_35px_rgba(16,185,129,0.15)]",
-          progressBarGradient: "from-emerald-600 via-emerald-400 to-teal-300",
-          accentColor: "emerald",
+          codename: 'ALPHA DIRECTIVE // RECON-01',
+          borderGlow:
+            'border-emerald-500/40 shadow-[0_0_35px_rgba(16,185,129,0.15)]',
+          progressBarGradient: 'from-emerald-600 via-emerald-400 to-teal-300',
+          accentColor: 'emerald',
         };
-      case "the-incursion-nexus":
+      case 'the-incursion-nexus':
         return {
-          badgeVariant: "silver" as BadgeVariant,
+          badgeVariant: 'silver' as BadgeVariant,
           quote:
-            "“When two universes collide, both are destroyed unless one is annihilated. The physics cannot be bargained with.”",
-          codename: "CASEFILE: TVA-NEXUS-084",
-          borderGlow: "border-slate-500/40 shadow-[0_0_35px_rgba(148,163,184,0.12)]",
-          progressBarGradient: "from-slate-500 via-slate-300 to-amber-400",
-          accentColor: "silver",
+            '“When two universes collide, both are destroyed unless one is annihilated. The physics cannot be bargained with.”',
+          codename: 'CASEFILE: TVA-NEXUS-084',
+          borderGlow:
+            'border-slate-500/40 shadow-[0_0_35px_rgba(148,163,184,0.12)]',
+          progressBarGradient: 'from-slate-500 via-slate-300 to-amber-400',
+          accentColor: 'silver',
         };
-      case "the-full-multiverse-chronicle":
+      case 'the-full-multiverse-chronicle':
       default:
         return {
-          badgeVariant: "gold" as BadgeVariant,
+          badgeVariant: 'gold' as BadgeVariant,
           quote:
-            "“Observe every reality, every post-credits omen, and every variant. The whole tapestry tells the coming doom.”",
-          codename: "CHRONICLE: OMNIVERSE-TOTALITY",
-          borderGlow: "border-amber-500/40 shadow-[0_0_35px_rgba(197,155,39,0.18)]",
-          progressBarGradient: "from-amber-600 via-amber-400 to-yellow-200",
-          accentColor: "gold",
+            '“Observe every reality, every post-credits omen, and every variant. The whole tapestry tells the coming doom.”',
+          codename: 'CHRONICLE: OMNIVERSE-TOTALITY',
+          borderGlow:
+            'border-amber-500/40 shadow-[0_0_35px_rgba(197,155,39,0.18)]',
+          progressBarGradient: 'from-amber-600 via-amber-400 to-yellow-200',
+          accentColor: 'gold',
         };
     }
   };
@@ -100,12 +142,31 @@ export function JourneyEngineView({ journey, chapters }: JourneyEngineViewProps)
   const theme = getThemeDetails();
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-12" aria-busy={!isLoaded}>
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-emerald-500/30 bg-surface-1 p-4">
+        <p id="spoiler-help" className="text-sm text-slate-300">
+          {spoilerShield
+            ? 'Spoiler shield protects unwatched stories and chapter briefings.'
+            : 'All narrative briefings are visible.'}
+        </p>
+        <button
+          type="button"
+          aria-pressed={spoilerShield}
+          aria-describedby="spoiler-help"
+          onClick={() => {
+            setSpoilerShield((value) => !value);
+            setRevealedIds([]);
+          }}
+          className="min-h-11 px-4 rounded border border-emerald-500/40 text-emerald-300 focus-ring-doom"
+        >
+          Spoiler shield: {spoilerShield ? 'On' : 'Off'}
+        </button>
+      </div>
       {/* Top Breadcrumb & Pathway Switcher Bar */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-white/5">
         <nav
           aria-label="Breadcrumb"
-          className="flex items-center gap-2 font-mono text-xs text-slate-400"
+          className="flex flex-wrap items-center gap-2 font-mono text-xs text-slate-400"
         >
           <Link
             href="/"
@@ -139,10 +200,10 @@ export function JourneyEngineView({ journey, chapters }: JourneyEngineViewProps)
                 href={`/pathways/${j.id}`}
                 className={`px-3 py-1 rounded text-xs font-mono uppercase tracking-wider transition-colors shrink-0 focus-ring-doom ${
                   isCurrent
-                    ? "bg-surface-3 text-slate-100 border border-emerald-500/40 shadow-sm"
-                    : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+                    ? 'bg-surface-3 text-slate-100 border border-emerald-500/40 shadow-sm'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
                 }`}
-                aria-current={isCurrent ? "page" : undefined}
+                aria-current={isCurrent ? 'page' : undefined}
               >
                 {j.title}
               </Link>
@@ -187,7 +248,9 @@ export function JourneyEngineView({ journey, chapters }: JourneyEngineViewProps)
         </div>
 
         <blockquote className="p-4 rounded-lg bg-surface-1/70 border-l-2 border-emerald-500 text-sm sm:text-base italic font-serif text-slate-300 mb-8 max-w-4xl">
-          {theme.quote}
+          {!spoilerShield
+            ? theme.quote
+            : 'Every story led here. Follow your chosen pathway, one chapter at a time.'}
         </blockquote>
 
         {/* Narrative & Audience Profile Grid */}
@@ -197,10 +260,13 @@ export function JourneyEngineView({ journey, chapters }: JourneyEngineViewProps)
               Strategic Narrative Trajectory
             </span>
             <p className="text-sm text-slate-300 font-light leading-relaxed">
-              {journey.description}
+              {!spoilerShield
+                ? journey.description
+                : 'A curated viewing journey toward Avengers: Doomsday. Narrative details unlock as you watch.'}
             </p>
             <p className="text-xs text-emerald-400/90 font-mono pt-1">
-              Core Focus: {journey.focus}
+              Core Focus:{' '}
+              {!spoilerShield ? journey.focus : 'Protected by spoiler shield'}
             </p>
           </div>
 
@@ -259,17 +325,17 @@ export function JourneyEngineView({ journey, chapters }: JourneyEngineViewProps)
             <span
               className={`px-3 py-1 rounded font-mono text-xs uppercase tracking-wider border ${
                 progress.isComplete
-                  ? "bg-emerald-950/40 text-emerald-300 border-emerald-500/40"
+                  ? 'bg-emerald-950/40 text-emerald-300 border-emerald-500/40'
                   : progress.completedCount > 0
-                    ? "bg-surface-2 text-amber-300 border-amber-500/30"
-                    : "bg-surface-2 text-slate-400 border-white/10"
+                    ? 'bg-surface-2 text-amber-300 border-amber-500/30'
+                    : 'bg-surface-2 text-slate-400 border-white/10'
               }`}
             >
               {progress.isComplete
-                ? "All Milestones Logged"
+                ? 'All Milestones Logged'
                 : progress.completedCount > 0
-                  ? "Track In Progress"
-                  : "Track Uninitiated"}
+                  ? 'Track In Progress'
+                  : 'Track Uninitiated'}
             </span>
 
             {/* Reset Trigger Button */}
@@ -278,7 +344,7 @@ export function JourneyEngineView({ journey, chapters }: JourneyEngineViewProps)
                 ref={resetTriggerRef}
                 type="button"
                 onClick={() => setShowResetModal(true)}
-                className="px-3 py-1 rounded text-xs font-mono uppercase tracking-wider text-red-400/90 hover:text-red-300 border border-red-500/20 hover:border-red-500/50 bg-red-950/20 hover:bg-red-950/40 transition-colors cursor-pointer focus-ring-doom"
+                className="min-h-11 px-3 py-1 rounded text-xs font-mono uppercase tracking-wider text-red-400/90 hover:text-red-300 border border-red-500/20 hover:border-red-500/50 bg-red-950/20 hover:bg-red-950/40 transition-colors cursor-pointer focus-ring-doom"
                 aria-haspopup="dialog"
               >
                 Reset Progress
@@ -291,10 +357,10 @@ export function JourneyEngineView({ journey, chapters }: JourneyEngineViewProps)
         <div className="space-y-2">
           <div className="flex justify-between items-baseline font-mono text-xs">
             <span className="text-slate-400">
-              Completed:{" "}
+              Completed:{' '}
               <strong className="text-emerald-400 font-bold">
                 {progress.completedCount}
-              </strong>{" "}
+              </strong>{' '}
               of {progress.totalCount} entries
             </span>
             <span
@@ -319,7 +385,7 @@ export function JourneyEngineView({ journey, chapters }: JourneyEngineViewProps)
               transition={
                 shouldReduceMotion
                   ? { duration: 0 }
-                  : { duration: 0.5, ease: "easeOut" }
+                  : { duration: 0.5, ease: 'easeOut' }
               }
               className={`h-full rounded-full bg-gradient-to-r ${theme.progressBarGradient} shadow-[0_0_15px_rgba(16,185,129,0.5)]`}
             />
@@ -378,13 +444,14 @@ export function JourneyEngineView({ journey, chapters }: JourneyEngineViewProps)
         </div>
 
         {/* Quick Bulk Action */}
-        <div className="flex items-center justify-between pt-2 border-t border-white/5 text-[11px] font-mono text-slate-400">
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-white/5 text-[11px] font-mono text-slate-400">
           <span>STORAGE: ISOLATED PER PATHWAY</span>
           {progress.completedCount < progress.totalCount ? (
             <button
               type="button"
+              disabled={!isLoaded}
               onClick={markAllWatched}
-              className="hover:text-emerald-400 transition-colors cursor-pointer underline underline-offset-4 focus-ring-doom"
+              className="min-h-11 hover:text-emerald-400 transition-colors cursor-pointer underline underline-offset-4 focus-ring-doom"
             >
               Mark all {progress.totalCount} entries as watched
             </button>
@@ -426,24 +493,37 @@ export function JourneyEngineView({ journey, chapters }: JourneyEngineViewProps)
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
             <div className="lg:col-span-8 space-y-2">
               <h3 className="text-2xl sm:text-3xl font-extrabold uppercase tracking-wide text-slate-100">
-                {nextMovie.title}{" "}
+                {nextMovie.title}{' '}
                 <span className="text-slate-400 font-mono text-base font-normal">
                   ({nextMovie.year})
                 </span>
               </h3>
               <p className="text-xs sm:text-sm text-slate-300 font-light leading-relaxed">
-                {nextMovie.description}
+                {canReveal(nextMovie.id)
+                  ? nextMovie.description
+                  : 'Unwatched objective. Mark it watched to unlock the narrative briefing.'}
               </p>
               <div className="p-3 rounded bg-surface-1/90 border border-emerald-500/20 text-xs text-slate-300 space-y-1">
                 <strong className="text-emerald-400 uppercase tracking-wider block font-mono text-[10px]">
                   Why watch this now:
                 </strong>
-                <p className="font-light">{nextMovie.whyItMatters}</p>
+                <p className="font-light">
+                  {canReveal(nextMovie.id)
+                    ? nextMovie.whyItMatters
+                    : 'Narrative significance protected by spoiler shield.'}
+                </p>
               </div>
             </div>
 
             <div className="lg:col-span-4 flex flex-col gap-3 justify-center items-stretch lg:items-end">
+              <PrerequisiteWarning
+                movieId={nextMovie.id}
+                journey={journey}
+                isWatched={isWatched}
+                onNavigate={openMovieChapter}
+              />
               <Button
+                disabled={!isLoaded}
                 type="button"
                 variant="primary"
                 size="lg"
@@ -467,6 +547,21 @@ export function JourneyEngineView({ journey, chapters }: JourneyEngineViewProps)
               >
                 Mark As Watched
               </Button>
+              <button
+                type="button"
+                onClick={() => openDossier(nextMovie.id)}
+                aria-haspopup="dialog"
+                className="min-h-11 text-sm text-emerald-300 underline focus-ring-doom"
+              >
+                Open movie dossier
+              </button>
+              <button
+                type="button"
+                onClick={() => openMovieChapter(nextMovie.id)}
+                className="min-h-11 text-sm text-emerald-300 underline focus-ring-doom"
+              >
+                Open chapter queue
+              </button>
               <span className="text-[11px] font-mono text-slate-400 text-center lg:text-right">
                 Advances to next eligible sequence entry
               </span>
@@ -490,10 +585,10 @@ export function JourneyEngineView({ journey, chapters }: JourneyEngineViewProps)
             Ascension Ready for Doomsday
           </h2>
           <p className="text-sm sm:text-base text-slate-300 max-w-xl mx-auto font-light leading-relaxed">
-            All {progress.totalCount} canonical milestones in{" "}
-            <strong className="text-emerald-400">{journey.title}</strong> have been
-            logged. Your strategic preparation for Victor Von Doom&apos;s arrival
-            is complete on this track.
+            All {progress.totalCount} canonical milestones in{' '}
+            <strong className="text-emerald-400">{journey.title}</strong> have
+            been logged. Your strategic preparation for Victor Von Doom&apos;s
+            arrival is complete on this track.
           </p>
           <div className="pt-4 flex flex-wrap justify-center gap-4">
             <Button href="/pathways" variant="primary" size="md">
@@ -505,6 +600,18 @@ export function JourneyEngineView({ journey, chapters }: JourneyEngineViewProps)
           </div>
         </section>
       )}
+
+      <ChapterAtlas
+        journey={journey}
+        chapters={chapters}
+        spoilerShield={spoilerShield}
+        isWatched={isWatched}
+        isLoaded={isLoaded}
+        onToggleWatched={toggleWatched}
+        onOpenChapter={openChapter}
+        onOpenDossier={openDossier}
+        suspended={dossierId !== null || showResetModal}
+      />
 
       {/* CHAPTER-BY-CHAPTER CHECKLIST ACCORDIONS */}
       <section aria-label="Narrative Chapters Checklist" className="space-y-8">
@@ -522,11 +629,29 @@ export function JourneyEngineView({ journey, chapters }: JourneyEngineViewProps)
           </span>
         </div>
 
+        <nav aria-label="Chapter navigation" className="flex flex-wrap gap-2">
+          {chapters.map((chapter, index) => (
+            <button
+              type="button"
+              key={chapter.id}
+              onClick={() => openChapter(chapter.id)}
+              className="min-h-11 px-4 rounded border border-white/10 bg-surface-2 text-sm text-emerald-300 focus-ring-doom"
+            >
+              Chapter {index + 1}
+            </button>
+          ))}
+        </nav>
         <div className="space-y-8">
           {chapters.map((chapter, chapterIdx) => {
-            const chapterMovies = getChapterMovies(chapter.id);
+            const chapterMovies = getChapterMovies(chapter.id).filter((movie) =>
+              journey.movieIds.includes(movie.id),
+            );
+            const expanded = openChapters.includes(chapter.id);
+            const remainingRuntime = chapterMovies
+              .filter((movie) => !isWatched(movie.id))
+              .reduce((sum, movie) => sum + movie.runtime, 0);
             const chapterWatched = chapterMovies.filter((m) =>
-              isWatched(m.id)
+              isWatched(m.id),
             ).length;
             const chapterComplete =
               chapterMovies.length > 0 &&
@@ -535,201 +660,244 @@ export function JourneyEngineView({ journey, chapters }: JourneyEngineViewProps)
             return (
               <section
                 key={chapter.id}
-                className={`rounded-xl border p-6 sm:p-8 space-y-6 transition-colors ${
+                className={`rounded-xl border p-4 sm:p-8 space-y-6 transition-colors ${
                   chapterComplete
-                    ? "bg-surface-1/60 border-emerald-500/25"
-                    : "bg-surface-1/40 border-white/5"
+                    ? 'bg-surface-1/60 border-emerald-500/25'
+                    : 'bg-surface-1/40 border-white/5'
                 }`}
               >
-                {/* Chapter Heading & Summary */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/5">
-                  <div className="flex items-center gap-3">
+                <h3>
+                  <button
+                    type="button"
+                    id={`${chapter.id}-trigger`}
+                    aria-expanded={expanded}
+                    aria-controls={`${chapter.id}-queue`}
+                    onClick={() =>
+                      setOpenChapters((ids) =>
+                        expanded
+                          ? ids.filter((id) => id !== chapter.id)
+                          : [...ids, chapter.id],
+                      )
+                    }
+                    className="scroll-mt-24 w-full min-h-11 text-left flex flex-wrap items-center justify-between gap-4 focus-ring-doom rounded-lg"
+                  >
+                    <span className="space-y-2 min-w-0">
+                      <span className="block font-mono text-xs text-emerald-400">
+                        CHAPTER 0{chapterIdx + 1} {'//'}{' '}
+                        {chapterComplete
+                          ? 'COMPLETE'
+                          : `${chapterWatched} / ${chapterMovies.length} LOGGED`}
+                      </span>
+                      <span className="block text-lg sm:text-xl font-bold uppercase tracking-wide text-slate-100">
+                        {!spoilerShield || chapterComplete
+                          ? chapter.title
+                          : `Chapter ${chapterIdx + 1}: Narrative briefing protected`}
+                      </span>
+                      <span className="block text-xs text-slate-400">
+                        {remainingRuntime}m remaining · {chapterMovies.length}{' '}
+                        entries
+                      </span>
+                    </span>
                     <span
-                      className={`flex items-center justify-center w-8 h-8 rounded-lg font-mono text-xs font-bold border ${
-                        chapterComplete
-                          ? "bg-emerald-950/60 border-emerald-500/60 text-emerald-300"
-                          : "bg-emerald-950/30 border-emerald-500/30 text-emerald-400"
-                      }`}
+                      aria-hidden="true"
+                      className="text-emerald-300 text-2xl"
                     >
-                      0{chapterIdx + 1}
+                      {expanded ? '−' : '+'}
                     </span>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <h3 className="text-lg sm:text-xl font-bold uppercase tracking-wide text-slate-100">
-                          {chapter.title}
-                        </h3>
-                        {chapterComplete && (
-                          <Badge variant="emerald" size="sm">
-                            Chapter Complete
-                          </Badge>
-                        )}
-                      </div>
-                      <p className="text-xs text-slate-400 font-light mt-0.5">
-                        {chapter.description}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs font-mono text-slate-400">
-                      {chapterWatched} / {chapterMovies.length} Logged
-                    </span>
-                  </div>
+                  </button>
+                </h3>
+                <div
+                  className="h-1 rounded bg-surface-3 overflow-hidden"
+                  aria-label={`${chapterWatched} of ${chapterMovies.length} chapter entries watched`}
+                >
+                  <div
+                    className="h-full bg-emerald-400 transition-[width]"
+                    style={{
+                      width: `${chapterMovies.length ? (chapterWatched / chapterMovies.length) * 100 : 0}%`,
+                    }}
+                  />
                 </div>
+                <div
+                  id={`${chapter.id}-queue`}
+                  role="region"
+                  aria-labelledby={`${chapter.id}-trigger`}
+                  hidden={!expanded}
+                >
+                  {expanded && (
+                    <motion.div
+                      initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: shouldReduceMotion ? 0 : 0.25 }}
+                      className="grid grid-cols-1 gap-4"
+                    >
+                      {(!spoilerShield || chapterComplete) && (
+                        <p className="text-sm text-slate-300">
+                          {chapter.description}
+                        </p>
+                      )}
+                      {chapterMovies.map((movie, movieIdx) => {
+                        const watched = isWatched(movie.id);
+                        const isNext = nextMovie?.id === movie.id;
 
-                {/* Chapter Entries Checklist */}
-                <div className="grid grid-cols-1 gap-4">
-                  {chapterMovies.map((movie, movieIdx) => {
-                    const watched = isWatched(movie.id);
-                    const prereqStatus = isMoviePrerequisitesMet(
-                      movie,
-                      watchedIds
-                    );
-                    const isNext = nextMovie?.id === movie.id;
-
-                    return (
-                      <article
-                        key={movie.id}
-                        className={`group relative rounded-xl border p-5 transition-all duration-200 ${
-                          watched
-                            ? "bg-surface-1/90 border-emerald-500/40 opacity-90 shadow-[0_0_20px_rgba(16,185,129,0.06)]"
-                            : isNext
-                              ? "bg-surface-2/70 border-emerald-500/50 shadow-[0_0_25px_rgba(16,185,129,0.12)]"
-                              : "bg-surface-2/40 border-white/5 hover:border-white/15"
-                        }`}
-                      >
-                        <div className="flex items-start gap-4">
-                          {/* Interactive Accessible Checkbox Button */}
-                          <button
-                            type="button"
-                            role="checkbox"
-                            aria-checked={watched}
-                            aria-label={`Mark ${movie.title} as ${watched ? "unwatched" : "watched"}`}
-                            onClick={() => toggleWatched(movie.id)}
-                            className={`mt-1 shrink-0 w-6 h-6 rounded flex items-center justify-center transition-all cursor-pointer focus-ring-doom ${
+                        return (
+                          <article
+                            key={movie.id}
+                            className={`group relative rounded-xl border p-4 sm:p-5 transition-all duration-200 ${
                               watched
-                                ? "bg-emerald-500 text-black border border-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.4)]"
-                                : "border border-white/20 bg-surface-1 hover:border-emerald-400/80 hover:bg-emerald-950/30"
+                                ? 'bg-surface-1/90 border-emerald-500/40 opacity-90 shadow-[0_0_20px_rgba(16,185,129,0.06)]'
+                                : isNext
+                                  ? 'bg-surface-2/70 border-emerald-500/50 shadow-[0_0_25px_rgba(16,185,129,0.12)]'
+                                  : 'bg-surface-2/40 border-white/5 hover:border-white/15'
                             }`}
                           >
-                            {watched && (
-                              <svg
-                                className="w-4 h-4 text-black stroke-[3]"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
+                            <div className="flex items-start gap-4">
+                              {/* Interactive Accessible Checkbox Button */}
+                              <button
+                                type="button"
+                                role="checkbox"
+                                aria-checked={watched}
+                                aria-label={`Mark ${movie.title} as ${watched ? 'unwatched' : 'watched'}`}
+                                disabled={!isLoaded}
+                                onClick={() => toggleWatched(movie.id)}
+                                className={`mt-1 shrink-0 w-11 h-11 rounded flex items-center justify-center transition-all cursor-pointer focus-ring-doom ${
+                                  watched
+                                    ? 'bg-emerald-500 text-black border border-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.4)]'
+                                    : 'border border-white/20 bg-surface-1 hover:border-emerald-400/80 hover:bg-emerald-950/30'
+                                }`}
                               >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M5 13l4 4L19 7"
-                                />
-                              </svg>
-                            )}
-                          </button>
-
-                          {/* Entry Metadata & Lore */}
-                          <div className="flex-1 space-y-3">
-                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                              <div className="flex items-center gap-2.5 flex-wrap">
-                                <span className="font-mono text-xs text-slate-500 font-bold">
-                                  #{movieIdx + 1}
-                                </span>
-                                <h4
-                                  className={`text-base font-bold transition-colors ${
-                                    watched
-                                      ? "text-slate-300"
-                                      : "text-slate-100"
-                                  }`}
-                                >
-                                  {movie.title}
-                                </h4>
-                                <span className="text-xs font-mono text-slate-400">
-                                  ({movie.year})
-                                </span>
-
                                 {watched && (
-                                  <Badge variant="emerald" size="sm">
-                                    Watched
-                                  </Badge>
+                                  <svg
+                                    className="w-4 h-4 text-black stroke-[3]"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      d="M5 13l4 4L19 7"
+                                    />
+                                  </svg>
                                 )}
+                              </button>
 
-                                {isNext && !watched && (
-                                  <Badge variant="gold" size="sm" pulse>
-                                    Next Up
-                                  </Badge>
-                                )}
-                              </div>
-
-                              <div className="flex items-center gap-2 flex-wrap">
-                                <Badge
-                                  variant={
-                                    movie.importance === "essential"
-                                      ? "emerald"
-                                      : "subtle"
-                                  }
-                                  size="sm"
-                                >
-                                  {movie.importance}
-                                </Badge>
-                                <Badge variant="subtle" size="sm">
-                                  {movie.type.toUpperCase()} &bull;{" "}
-                                  {movie.runtime}m
-                                </Badge>
-                                {movie.postCreditRequired && (
-                                  <Badge variant="gold" size="sm">
-                                    Post-Credits
-                                  </Badge>
-                                )}
-                              </div>
-                            </div>
-
-                            {/* Synopsis */}
-                            <p className="text-xs sm:text-sm text-slate-300 font-light leading-relaxed">
-                              {movie.description}
-                            </p>
-
-                            {/* Why It Matters Lore Briefing */}
-                            <div className="p-3 rounded bg-surface-1/80 border border-white/5 text-xs space-y-1">
-                              <span className="font-mono text-[10px] uppercase text-emerald-400 tracking-wider font-semibold block">
-                                Relevance to Avengers: Doomsday
-                              </span>
-                              <p className="text-slate-300 font-light leading-relaxed">
-                                {movie.whyItMatters}
-                              </p>
-                            </div>
-
-                            {/* Prerequisites Check Indicator */}
-                            {movie.prerequisites &&
-                              movie.prerequisites.length > 0 && (
-                                <div className="flex items-center gap-2 text-[11px] font-mono pt-1">
-                                  <span className="text-slate-500">
-                                    Prerequisites:
-                                  </span>
-                                  {movie.prerequisites.map((pId) => {
-                                    const pMovie = getMovieById(pId);
-                                    const pWatched = isWatched(pId);
-                                    return (
-                                      <span
-                                        key={pId}
-                                        className={`px-2 py-0.5 rounded text-[10px] border ${
-                                          pWatched
-                                            ? "bg-emerald-950/30 border-emerald-500/30 text-emerald-300"
-                                            : "bg-surface-1 border-white/10 text-slate-400"
-                                        }`}
+                              {/* Entry Metadata & Lore */}
+                              <div className="flex-1 min-w-0 space-y-3">
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                  <div className="flex items-center gap-2.5 flex-wrap">
+                                    <span className="font-mono text-xs text-slate-500 font-bold">
+                                      #{movieIdx + 1}
+                                    </span>
+                                    <h4
+                                      className={`text-base font-bold transition-colors ${
+                                        watched
+                                          ? 'text-slate-300'
+                                          : 'text-slate-100'
+                                      }`}
+                                    >
+                                      <button
+                                        type="button"
+                                        onClick={() => openDossier(movie.id)}
+                                        aria-haspopup="dialog"
+                                        aria-label={`Open dossier for ${movie.title}`}
+                                        className="min-h-11 text-left hover:text-emerald-300 focus-ring-doom rounded"
                                       >
-                                        {pMovie ? pMovie.title : pId}{" "}
-                                        {pWatched ? "✓" : "○"}
-                                      </span>
-                                    );
-                                  })}
+                                        {movie.title}
+                                      </button>
+                                    </h4>
+                                    <span className="text-xs font-mono text-slate-400">
+                                      ({movie.year})
+                                    </span>
+
+                                    {watched && (
+                                      <Badge variant="emerald" size="sm">
+                                        Watched
+                                      </Badge>
+                                    )}
+
+                                    {isNext && !watched && (
+                                      <Badge variant="gold" size="sm" pulse>
+                                        Next Up
+                                      </Badge>
+                                    )}
+                                  </div>
+
+                                  <div className="flex items-center gap-2 flex-wrap">
+                                    <Badge
+                                      variant={
+                                        movie.importance === 'essential'
+                                          ? 'emerald'
+                                          : 'subtle'
+                                      }
+                                      size="sm"
+                                    >
+                                      {movie.importance}
+                                    </Badge>
+                                    <Badge variant="subtle" size="sm">
+                                      {movie.type.toUpperCase()} &bull;{' '}
+                                      {movie.runtime}m
+                                    </Badge>
+                                    {movie.postCreditRequired && (
+                                      <Badge variant="gold" size="sm">
+                                        Post-Credits
+                                      </Badge>
+                                    )}
+                                  </div>
                                 </div>
-                              )}
-                          </div>
-                        </div>
-                      </article>
-                    );
-                  })}
+
+                                {/* Synopsis */}
+                                <p className="text-xs sm:text-sm text-slate-300 font-light leading-relaxed">
+                                  {canReveal(movie.id)
+                                    ? movie.description
+                                    : 'Synopsis protected until watched.'}
+                                </p>
+
+                                {/* Why It Matters Lore Briefing */}
+                                <div className="p-3 rounded bg-surface-1/80 border border-white/5 text-xs space-y-1">
+                                  <span className="font-mono text-[10px] uppercase text-emerald-400 tracking-wider font-semibold block">
+                                    Relevance to Avengers: Doomsday
+                                  </span>
+                                  <p className="text-slate-300 font-light leading-relaxed">
+                                    {canReveal(movie.id)
+                                      ? movie.whyItMatters
+                                      : 'Narrative significance protected until watched.'}
+                                  </p>
+                                </div>
+
+                                {spoilerShield && !watched && (
+                                  <button
+                                    type="button"
+                                    aria-pressed={revealedIds.includes(
+                                      movie.id,
+                                    )}
+                                    onClick={() =>
+                                      setRevealedIds((ids) =>
+                                        ids.includes(movie.id)
+                                          ? ids.filter((id) => id !== movie.id)
+                                          : [...ids, movie.id],
+                                      )
+                                    }
+                                    className="min-h-11 text-xs text-emerald-300 underline focus-ring-doom"
+                                  >
+                                    {revealedIds.includes(movie.id)
+                                      ? 'Hide spoilers'
+                                      : 'Reveal spoilers'}{' '}
+                                    for {movie.title}
+                                  </button>
+                                )}
+                                <PrerequisiteWarning
+                                  movieId={movie.id}
+                                  journey={journey}
+                                  isWatched={isWatched}
+                                  onNavigate={openMovieChapter}
+                                />
+                              </div>
+                            </div>
+                          </article>
+                        );
+                      })}
+                    </motion.div>
+                  )}
                 </div>
               </section>
             );
@@ -737,13 +905,42 @@ export function JourneyEngineView({ journey, chapters }: JourneyEngineViewProps)
         </div>
       </section>
 
+      {dossierId && (
+        <MovieDossier
+          movieId={dossierId}
+          journey={journey}
+          spoilerShield={spoilerShield}
+          onSelect={setDossierId}
+          onClose={closeDossier}
+        />
+      )}
+
       {/* RESET CONFIRMATION MODAL */}
       {showResetModal && (
-        <div
-          role="dialog"
+        <dialog
+          ref={dialogRef}
+          onCancel={(event) => {
+            event.preventDefault();
+            closeResetDialog();
+          }}
+          onKeyDown={(event) => {
+            if (event.key !== 'Tab') return;
+            const buttons =
+              dialogRef.current?.querySelectorAll<HTMLButtonElement>('button');
+            if (!buttons?.length) return;
+            const first = buttons[0];
+            const last = buttons[buttons.length - 1];
+            if (event.shiftKey && document.activeElement === first) {
+              event.preventDefault();
+              last.focus();
+            } else if (!event.shiftKey && document.activeElement === last) {
+              event.preventDefault();
+              first.focus();
+            }
+          }}
           aria-modal="true"
           aria-labelledby="reset-modal-title"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md"
+          className="fixed inset-0 m-auto z-50 w-[calc(100%-2rem)] max-w-md max-h-[90dvh] overflow-y-auto bg-transparent p-0 text-slate-100 backdrop:bg-black/80 backdrop:backdrop-blur-md"
         >
           <div
             className="relative w-full max-w-md rounded-2xl bg-surface-1 border border-red-500/40 p-6 sm:p-8 space-y-6 shadow-2xl"
@@ -763,7 +960,7 @@ export function JourneyEngineView({ journey, chapters }: JourneyEngineViewProps)
               </h3>
               <p className="text-xs sm:text-sm text-slate-300 font-light leading-relaxed">
                 This will uncheck all {progress.completedCount} watched entries
-                and reset the completion telemetry for{" "}
+                and reset the completion telemetry for{' '}
                 <strong className="text-slate-100 font-semibold">
                   {journey.title}
                 </strong>
@@ -773,11 +970,10 @@ export function JourneyEngineView({ journey, chapters }: JourneyEngineViewProps)
 
             <div className="p-3 rounded bg-surface-2 border border-white/5 font-mono text-xs text-slate-400 space-y-1">
               <div>
-                TARGET:{" "}
-                <span className="text-slate-200">{journey.id}</span>
+                TARGET: <span className="text-slate-200">{journey.id}</span>
               </div>
               <div>
-                ENTRIES TO UNMARK:{" "}
+                ENTRIES TO UNMARK:{' '}
                 <span className="text-red-400 font-bold">
                   {progress.completedCount}
                 </span>
@@ -786,31 +982,75 @@ export function JourneyEngineView({ journey, chapters }: JourneyEngineViewProps)
 
             <div className="flex flex-col sm:flex-row items-center justify-end gap-3 pt-2">
               <button
+                ref={modalCancelRef}
                 type="button"
                 onClick={() => {
-                  setShowResetModal(false);
-                  resetTriggerRef.current?.focus();
+                  closeResetDialog();
                 }}
-                className="w-full sm:w-auto px-4 py-2 rounded text-xs font-mono uppercase tracking-wider text-slate-300 hover:text-white bg-surface-2 hover:bg-surface-3 border border-white/10 transition-colors cursor-pointer focus-ring-doom"
+                className="min-h-11 w-full sm:w-auto px-4 py-2 rounded text-xs font-mono uppercase tracking-wider text-slate-300 hover:text-white bg-surface-2 hover:bg-surface-3 border border-white/10 transition-colors cursor-pointer focus-ring-doom"
               >
                 Cancel
               </button>
               <button
-                ref={modalConfirmRef}
                 type="button"
                 onClick={() => {
                   resetProgress();
-                  setShowResetModal(false);
-                  resetTriggerRef.current?.focus();
+                  closeResetDialog(true);
                 }}
-                className="w-full sm:w-auto px-4 py-2 rounded text-xs font-mono uppercase tracking-wider text-white bg-red-600 hover:bg-red-500 border border-red-400 transition-colors cursor-pointer shadow-[0_0_15px_rgba(239,68,68,0.4)] focus-ring-doom"
+                className="min-h-11 w-full sm:w-auto px-4 py-2 rounded text-xs font-mono uppercase tracking-wider text-white bg-red-600 hover:bg-red-500 border border-red-400 transition-colors cursor-pointer shadow-[0_0_15px_rgba(239,68,68,0.4)] focus-ring-doom"
               >
                 Confirm Reset
               </button>
             </div>
           </div>
-        </div>
+        </dialog>
       )}
+    </div>
+  );
+}
+
+function PrerequisiteWarning({
+  movieId,
+  journey,
+  isWatched,
+  onNavigate,
+}: {
+  movieId: string;
+  journey: Journey;
+  isWatched: (id: string) => boolean;
+  onNavigate: (id: string) => void;
+}) {
+  const movie = getMovieById(movieId);
+  const missing = movie?.prerequisites.filter((id) => !isWatched(id)) ?? [];
+  if (!missing.length) return null;
+  return (
+    <div className="rounded-lg border border-amber-500/30 bg-amber-950/20 p-3 text-xs text-amber-200 space-y-2">
+      <p>
+        Recommended context still unwatched in this pathway. You can continue in
+        any order.
+      </p>
+      <ul className="space-y-1">
+        {missing.map((id) => {
+          const prerequisite = getMovieById(id);
+          const inJourney = journey.movieIds.includes(id);
+          return (
+            <li key={id}>
+              {prerequisite?.title ?? id}
+              {inJourney ? (
+                <button
+                  type="button"
+                  onClick={() => onNavigate(id)}
+                  className="min-h-11 ml-2 underline focus-ring-doom"
+                >
+                  Open prerequisite chapter
+                </button>
+              ) : (
+                ' — outside this pathway; not counted toward completion'
+              )}
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }

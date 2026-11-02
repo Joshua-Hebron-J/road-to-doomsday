@@ -1,7 +1,12 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  experimental: {
+    // Evaluate PostCSS/loaders in threads instead of socket-connected child processes.
+    turbopackPluginRuntimeStrategy: 'workerThreads',
+    workerThreads: true,
+    cpus: 2,
+  },
 };
 
 export default nextConfig;
