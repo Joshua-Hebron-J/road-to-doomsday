@@ -13,6 +13,13 @@ import { useWatchProgress } from '../hooks/use-watch-progress';
 import { getAllJourneys, getChapterMovies, getMovieById } from '../lib/journey';
 
 const MovieDossier = dynamic(() => import('./movie-dossier'));
+const PrerequisiteLineage = dynamic(() => import('./prerequisite-lineage'), {
+  loading: () => (
+    <p role="status" className="p-5 text-slate-300">
+      Opening story prerequisite graph…
+    </p>
+  ),
+});
 
 interface JourneyEngineViewProps {
   journey: Journey;
@@ -24,6 +31,7 @@ export function JourneyEngineView({
   chapters,
 }: JourneyEngineViewProps) {
   const allJourneys = getAllJourneys();
+  const [showLineage, setShowLineage] = useState(false);
   const [dossierId, setDossierId] = useState<string | null>(null);
   const dossierTrigger = useRef<HTMLElement | null>(null);
   function openDossier(id: string) {
@@ -600,6 +608,47 @@ export function JourneyEngineView({
           </div>
         </section>
       )}
+
+      <section id="prerequisite-lineage" className="scroll-mt-24 space-y-5">
+        <div className="rounded-xl border border-violet-400/25 bg-gradient-to-r from-indigo-950/30 via-surface-1 to-surface-1 p-5 sm:p-6 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-violet-300">
+              Story connections
+            </p>
+            <h2 className="text-xl sm:text-2xl font-semibold text-slate-100 mt-1">
+              Prerequisite Lineage &amp; Dependency Graph
+            </h2>
+            <p className="text-sm text-slate-400 mt-2">
+              Trace the stories that lead here, with your pathway progress in
+              view.
+            </p>
+          </div>
+          <button
+            type="button"
+            disabled={!isLoaded}
+            aria-expanded={showLineage}
+            aria-controls="story-prerequisite-content"
+            onClick={() => setShowLineage((value) => !value)}
+            className="min-h-11 px-4 rounded-lg border border-violet-400/40 text-sm text-violet-200 focus-ring-doom disabled:opacity-50"
+          >
+            {showLineage
+              ? 'Close prerequisite graph'
+              : 'Explore prerequisite lineage'}
+          </button>
+        </div>
+        <div id="story-prerequisite-content" hidden={!showLineage}>
+          {showLineage && (
+            <PrerequisiteLineage
+              journey={journey}
+              isWatched={isWatched}
+              isLoaded={isLoaded}
+              onToggleWatched={toggleWatched}
+              onOpenDossier={openDossier}
+              suspended={dossierId !== null || showResetModal}
+            />
+          )}
+        </div>
+      </section>
 
       <ChapterAtlas
         journey={journey}

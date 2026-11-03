@@ -12,7 +12,7 @@ import {
 } from 'react';
 import { motion, useInView, useReducedMotion } from 'motion/react';
 import { detectSceneCapability } from '../lib/scene-capability';
-import type { SpatialNode } from './spatial-scene-types';
+import type { SpatialNode, SpatialEdge } from './spatial-scene-types';
 
 const SpatialCanvas = dynamic(() => import('./spatial-canvas'), {
   ssr: false,
@@ -78,19 +78,23 @@ export function SceneExplorer({
   variant,
   children,
   suspended = false,
+  edges,
+  fallback,
 }: {
   title: string;
   nodes: SpatialNode[];
   selectedId: string;
   onSelect: (id: string) => void;
-  variant: 'rift' | 'timeline' | 'chapters' | 'movies';
+  variant: 'rift' | 'timeline' | 'chapters' | 'movies' | 'lineage';
   children?: ReactNode;
   suspended?: boolean;
+  edges?: SpatialEdge[];
+  fallback?: ReactNode;
 }) {
-  const host = useRef<HTMLDivElement>(null);
+  const stage = useRef<HTMLDivElement>(null);
   const controls = useRef<HTMLDivElement>(null);
-  const entered = useInView(host, { once: true, margin: '120px' });
-  const inView = useInView(host, { amount: 0.1 });
+  const entered = useInView(stage, { once: true, margin: '120px' });
+  const inView = useInView(stage, { amount: 0.1 });
   const visible = useSyncExternalStore(
     subscribeVisibility,
     () => document.visibilityState === 'visible',
@@ -133,7 +137,6 @@ export function SceneExplorer({
 
   return (
     <section
-      ref={host}
       aria-label={title}
       className="spatial-explorer rounded-2xl border border-emerald-500/25 bg-surface-1/80 overflow-hidden shadow-card-cinematic text-left"
     >
@@ -178,7 +181,12 @@ export function SceneExplorer({
         </div>
       </div>
       <div
-        className={`relative bg-[radial-gradient(ellipse_at_center,rgba(4,120,87,0.18),transparent_70%)] ${variant === 'rift' ? 'h-[280px] sm:h-[360px]' : 'h-[320px] sm:h-[400px]'}`}
+        ref={stage}
+        style={{
+          backgroundImage:
+            'radial-gradient(ellipse at 25% 30%, rgba(99,102,241,0.13), transparent 65%), radial-gradient(ellipse at 80% 70%, rgba(14,116,144,0.12), transparent 65%)',
+        }}
+        className={`relative ${variant === 'rift' ? 'h-[280px] sm:h-[360px]' : 'h-[320px] sm:h-[400px]'}`}
         data-scene-mode={show3D ? '3d' : 'lightweight'}
       >
         {show3D && entered ? (
@@ -191,8 +199,11 @@ export function SceneExplorer({
               animated={animated}
               active={inView && visible}
               onFailure={fail}
+              edges={edges}
             />
           </SceneBoundary>
+        ) : fallback ? (
+          fallback
         ) : (
           <div
             className="absolute inset-0 flex items-center justify-center gap-3 px-4 overflow-hidden"
@@ -216,12 +227,14 @@ export function SceneExplorer({
             ))}
           </div>
         )}
-        <p className="absolute left-4 bottom-3 right-4 text-center pointer-events-none font-mono text-[10px] uppercase tracking-wider text-slate-400">
-          {show3D
-            ? 'Select a portal · move the pointer to explore depth'
-            : 'Lightweight map · all navigation remains available below'}
-        </p>
       </div>
+      <p className="px-4 py-3 border-t border-white/5 text-center font-mono text-[10px] uppercase tracking-wider text-slate-400">
+        {show3D
+          ? variant === 'lineage'
+            ? 'Story prerequisites · select a node or arrow to explore'
+            : 'Select a portal · move the pointer to explore depth'
+          : 'Lightweight map · all navigation remains available below'}
+      </p>
       <div className="border-t border-white/10 p-4 sm:p-6 space-y-5">
         <div
           ref={controls}

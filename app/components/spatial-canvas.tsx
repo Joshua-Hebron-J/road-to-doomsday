@@ -181,11 +181,28 @@ function CameraRig({
   points: Point[];
   animated: boolean;
 }) {
+  const focus = useRef(new THREE.Vector3());
+  const bounds = useMemo(() => {
+    const vertical = Math.max(
+      2.6,
+      ...points.map((value) => Math.abs(value[1]) + 1.25),
+    );
+    const horizontal = Math.max(
+      3.6,
+      ...points.map((value) => Math.abs(value[0]) + 0.9),
+    );
+    return { vertical, horizontal };
+  }, [points]);
   useFrame((state, delta) => {
     const { camera, size } = state;
     const point = points[selected] ?? [0, 0, 0];
-    const aspect = size.width / Math.max(size.height, 1);
-    const distance = aspect < 1.2 ? 12 : 8.5;
+    const aspect = Math.max(size.width / Math.max(size.height, 1), 0.25);
+    const fitDistance =
+      Math.max(
+        bounds.vertical / Math.tan((22 * Math.PI) / 180),
+        bounds.horizontal / (Math.tan((22 * Math.PI) / 180) * aspect),
+      ) + 0.8;
+    const distance = Math.max(aspect < 1.2 ? 12 : 8.5, fitDistance);
     const parallax = animated && size.width >= 600;
     const targetX = point[0] * 0.16 + (parallax ? state.pointer.x * 0.32 : 0);
     const targetY =
@@ -214,9 +231,68 @@ function CameraRig({
           Math.min(delta, 0.05),
         )
       : distance;
-    camera.lookAt(point[0] * 0.08, point[1] * 0.05, 0);
+    const focusX = point[0] * 0.08;
+    const focusY = point[1] * 0.05;
+    focus.current.x = animated
+      ? THREE.MathUtils.damp(focus.current.x, focusX, 3, Math.min(delta, 0.05))
+      : focusX;
+    focus.current.y = animated
+      ? THREE.MathUtils.damp(focus.current.y, focusY, 3, Math.min(delta, 0.05))
+      : focusY;
+    camera.lookAt(focus.current);
   });
   return null;
+}
+
+function DependencyConnection({
+  a,
+  b,
+  color,
+  emphasized,
+  onActivate,
+}: {
+  a: Point;
+  b: Point;
+  color: string;
+  emphasized: boolean;
+  onActivate: () => void;
+}) {
+  const arrow = useMemo(() => {
+    const direction = new THREE.Vector3(...b)
+      .sub(new THREE.Vector3(...a))
+      .normalize();
+    return {
+      position: new THREE.Vector3(...b).addScaledVector(direction, -0.65),
+      rotation: new THREE.Quaternion().setFromUnitVectors(
+        new THREE.Vector3(0, 1, 0),
+        direction,
+      ),
+    };
+  }, [a, b]);
+  return (
+    <group
+      onClick={(event: ThreeEvent<MouseEvent>) => {
+        event.stopPropagation();
+        onActivate();
+      }}
+    >
+      <Line
+        points={[a, b]}
+        color={color}
+        lineWidth={emphasized ? 1.7 : 1}
+        transparent
+        opacity={emphasized ? 0.9 : 0.6}
+      />
+      <mesh position={arrow.position} quaternion={arrow.rotation}>
+        <coneGeometry args={[0.055, 0.16, 6]} />
+        <meshBasicMaterial
+          color={color}
+          transparent
+          opacity={emphasized ? 0.95 : 0.7}
+        />
+      </mesh>
+    </group>
+  );
 }
 
 function ContextGuard({ onFailure }: { onFailure: () => void }) {
@@ -260,15 +336,16 @@ export default function SpatialCanvas({
   animated,
   active,
   onFailure,
+  edges,
 }: SpatialCanvasProps) {
   const device = navigator as Navigator & { deviceMemory?: number };
   const lowDetail =
     (device.hardwareConcurrency > 0 && device.hardwareConcurrency <= 4) ||
     (device.deviceMemory !== undefined && device.deviceMemory <= 4);
-  const points = useMemo(
-    () => positions(nodes.length, variant === 'timeline'),
-    [nodes.length, variant],
-  );
+  const points = useMemo(() => {
+    const defaults = positions(nodes.length, variant === 'timeline');
+    return nodes.map((node, index) => node.position ?? defaults[index]);
+  }, [nodes, variant]);
   const selected = Math.max(
     0,
     nodes.findIndex((node) => node.id === selectedId),
@@ -293,7 +370,21 @@ export default function SpatialCanvas({
           points={points}
           animated={animated && active}
         />
-        <ambientLight intensity={0.65} />
+        <ambientLight intensity={0.55} />
+        <pointLight
+          position={[-3, 2, 2]}
+          color="#818cf8"
+          intensity={1.1}
+          distance={10}
+          decay={2}
+        />
+        <pointLight
+          position={[4, -1, -2]}
+          color="#7c3aed"
+          intensity={0.8}
+          distance={9}
+          decay={2}
+        />
         <directionalLight
           position={[2, 3, 4]}
           intensity={1.6}
@@ -302,7 +393,24 @@ export default function SpatialCanvas({
         {variant === 'rift' && (
           <RiftBackdrop animated={animated && active} lowDetail={lowDetail} />
         )}
-        {points.length > 1 && (
+        {edges?.map((edge) => {
+          const source = nodes.findIndex((node) => node.id === edge.source);
+          const target = nodes.findIndex((node) => node.id === edge.target);
+          if (source < 0 || target < 0) return null;
+          const direct =
+            edge.source === selectedId || edge.target === selectedId;
+          return (
+            <DependencyConnection
+              key={edge.id}
+              a={points[source]}
+              b={points[target]}
+              color={edge.color ?? (direct ? '#c4b5fd' : '#94a3b8')}
+              emphasized={direct}
+              onActivate={() => onSelect(edge.target)}
+            />
+          );
+        })}
+        {!edges && points.length > 1 && (
           <Line
             points={points}
             color="#34d399"
@@ -325,7 +433,7 @@ export default function SpatialCanvas({
           />
         ))}
         <gridHelper
-          args={[18, 18, '#164e3d', '#0d231f']}
+          args={[18, 18, '#252b4a', '#101421']}
           position={[0, -2.25, -2]}
         />
       </Canvas>

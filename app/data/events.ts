@@ -3,6 +3,7 @@ import { Event } from "../types/event";
 export const events: Event[] = [
   {
     id: "event-citadel-rupture",
+    chronology: { placement: 'outside-time' },
     title: "Fracture of the Sacred Timeline",
     date: "End of Time",
     description:
@@ -12,6 +13,7 @@ export const events: Event[] = [
   },
   {
     id: "event-kof-kol-rupture",
+    chronology: { placement: 'dated', year: 2024 },
     title: "The Runes of Kof-Kol Rupture",
     date: "November 2024 (Earth-616)",
     description:
@@ -21,6 +23,7 @@ export const events: Event[] = [
   },
   {
     id: "event-incursion-discovery",
+    chronology: { placement: 'dated', year: 2025 },
     title: "Documenting Incursion Physics",
     date: "Spring 2025 (Earth-838 & Earth-616)",
     description:
@@ -30,6 +33,7 @@ export const events: Event[] = [
   },
   {
     id: "event-god-of-stories",
+    chronology: { placement: 'outside-time' },
     title: "Ascension of the God of Stories",
     date: "Outside Normal Time",
     description:
@@ -39,6 +43,7 @@ export const events: Event[] = [
   },
   {
     id: "event-anchor-decay",
+    chronology: { placement: 'undated' },
     title: "Anchor Being Theory Confirmed",
     date: "TVA Registry",
     description:
@@ -48,6 +53,7 @@ export const events: Event[] = [
   },
   {
     id: "event-sovereign-horizon",
+    chronology: { placement: 'undated' },
     title: "The Doomsday Convergence",
     date: "Phase VI Horizon",
     description:

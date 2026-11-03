@@ -5,4 +5,8 @@ export interface Event {
   description: string;
   relatedMovieId?: string;
   special: boolean;
+  chronology?: {
+    placement: 'dated' | 'outside-time' | 'undated';
+    year?: number;
+  };
 }

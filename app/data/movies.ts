@@ -79,6 +79,13 @@ export const movies: Movie[] = [
   },
   {
     id: "loki-s1",
+    release: {
+      date: '2021-06-09',
+      territory: 'US',
+      kind: 'streaming-premiere',
+      source: 'https://d23.com/meet-the-characters-of-loki/',
+      verifiedOn: '2026-11-03',
+    },
     title: "Loki (Season 1)",
     year: 2021,
     runtime: 287,
@@ -126,6 +133,13 @@ export const movies: Movie[] = [
   },
   {
     id: "spider-man-no-way-home",
+    release: {
+      date: '2021-12-17',
+      territory: 'US',
+      kind: 'theatrical',
+      source: 'https://www.marvel.com/movies/spider-man-no-way-home',
+      verifiedOn: '2026-11-03',
+    },
     title: "Spider-Man: No Way Home",
     year: 2021,
     runtime: 148,
@@ -141,6 +155,14 @@ export const movies: Movie[] = [
   },
   {
     id: "doctor-strange-in-the-multiverse-of-madness",
+    release: {
+      date: '2022-05-06',
+      territory: 'US',
+      kind: 'theatrical',
+      source:
+        'https://www.marvel.com/movies/doctor-strange-in-the-multiverse-of-madness',
+      verifiedOn: '2026-11-03',
+    },
     title: "Doctor Strange in the Multiverse of Madness",
     year: 2022,
     runtime: 126,
@@ -186,6 +208,14 @@ export const movies: Movie[] = [
   },
   {
     id: "loki-s2",
+    release: {
+      date: '2023-10-05',
+      territory: 'US',
+      kind: 'streaming-premiere',
+      source:
+        'https://press.disneyplus.com/news/disney-plus-shares-loki-season-2-multi-city-fan-event-photos',
+      verifiedOn: '2026-11-03',
+    },
     title: "Loki (Season 2)",
     year: 2023,
     runtime: 294,
@@ -217,6 +247,14 @@ export const movies: Movie[] = [
   },
   {
     id: "deadpool-and-wolverine",
+    release: {
+      date: '2024-07-26',
+      territory: 'US',
+      kind: 'theatrical',
+      source:
+        'https://www.marvel.com/deadpool-and-wolverine-live-red-carpet-premiere',
+      verifiedOn: '2026-11-03',
+    },
     title: "Deadpool & Wolverine",
     year: 2024,
     runtime: 128,
@@ -264,6 +302,13 @@ export const movies: Movie[] = [
   },
   {
     id: "fantastic-four-first-steps",
+    release: {
+      date: '2025-07-25',
+      territory: 'US',
+      kind: 'theatrical',
+      source: 'https://www.marvel.com/movies/fantastic-four',
+      verifiedOn: '2026-11-03',
+    },
     title: "The Fantastic Four: First Steps",
     year: 2025,
     runtime: 130,

@@ -2,7 +2,7 @@
 
 This living dashboard tracks development progress, milestone criteria, verification results, and subsequent phases for *The Road to Doomsday* cinematic fan archive across the original 21-phase master roadmap.
 
-**Latest verification:** Phase 7 is implemented and production-browser verified. Lint, TypeScript, all 10 regression tests, and the normal Turbopack production build pass. Earlier audit entries below are historical; the Phase 7 entry records the resolution of the build blocker. Physical-device/performance and system reduced-motion QA remain open.
+**Latest verification:** Phase 8 story graph re-audited; connections now selectable in both 3D and SVG. Phase 9 chronology scrubber implemented for the existing six nexus events. Phase 10 remains planned and was deliberately not combined. Original 21-phase roadmap preserved. See the 2026-11-03 batch entry below for tests and limitations; earlier entries are historical.
 
 ---
 
@@ -17,8 +17,8 @@ This living dashboard tracks development progress, milestone criteria, verificat
 | **05** | **Journey Engine (Interactive Watch Tracker)** | **VERIFIED** | 2026-11-02 | Local storage watch state persistence (`Progress`, `WatchState`), interactive checklist toggles, real-time progress bar, dynamic remaining runtime recalculation, and next-movie recommendation indicator based on `journey.ts`. |
 | **06** | **Pathway Deep Dive & Chapter Navigation** | **VERIFIED** | 2026-11-02 | Full chapter accordions, contextual watch queues, prerequisites warnings, and spoiler-shield controls. |
 | **07** | **Media Detail System & Cinematic Dossiers** | **IMPLEMENTED / VERIFIED** | 2026-11-02 | Drawer/modal movie dossiers, "Why It Matters" lore analysis, post-credit stinger indicators, and streaming service links. |
-| **08** | **Prerequisite Lineage & Dependency Graph** | **PLANNED** | Pending | Interactive visual node graph displaying precursor story dependencies and technology lineages leading to Doomsday. |
-| **09** | **Multiverse Macro Chronology & Timeline Scrubber** | **PARTIAL — 3D PREVIEW** | 2026-11-02 | Interactive horizontal timeline scrubber with in-universe chronological year and theatrical release date toggle modes. |
+| **08** | **Prerequisite Lineage & Dependency Graph** | **INITIAL STORY GRAPH VERIFIED** | 2026-11-02 | Interactive visual node graph displaying precursor story dependencies and technology lineages leading to Doomsday. |
+| **09** | **Multiverse Macro Chronology & Timeline Scrubber** | **IMPLEMENTED / VERIFIED — SIX-EVENT ARCHIVE** | 2026-11-03 | Interactive horizontal timeline scrubber with in-universe chronological year and theatrical release date toggle modes. |
 | **10** | **Incursion Engine & Reality Tear Simulator** | **PLANNED** | Pending | Interactive dimensional collision simulation, incursion threat gauge, universe designation badges, and dying reality alerts. |
 | **11** | **Character & Variant Lineage Tracker** | **PLANNED** | Pending | Tracking variants across alternate Earths (Doctor Strange, Loki, Reed Richards, Wanda Maximoff, Victor Von Doom). |
 | **12** | **Doctor Doom & Latverian Lore Codex** | **PLANNED** | Pending | Victor Von Doom entity dossier, comic origins vs MCU adaptation, monarch armor analysis, and sovereign philosophical worldview. |
@@ -303,3 +303,168 @@ The remaining build blocker was reproduced with both Turbopack loader startup an
 - Existing localStorage synchronization is last-writer-wins for truly simultaneous cross-tab writes. Multi-device/account sync remains outside this phase.
 
 **Next recommended action: review Phase 7 and finish the device/accessibility checks above. Future roadmap phases are recorded only; work stops here.**
+
+
+---
+
+## Phase 8 — Prerequisite Lineage & Dependency Graph — 2026-11-02
+
+**Result:** initial interactive story-prerequisite graph implemented and verified. The original Phase 8 title and 21-phase roadmap remain intact. Phase 9 was not started in this run.
+
+### Scope clarification and audit
+
+The roadmap's exact Phase 8 objective is an interactive visual node graph showing precursor story dependencies and technology lineages leading to Doomsday. The existing data defines `Movie.prerequisites` but no explicit technology relationships. This ambiguity was reported before implementation. The user authorized the initial graph using existing prerequisite relationships, required clear story-prerequisite labels, requested an extensible architecture, and designated explicit technology lineage as a planned enhancement.
+
+Reviewed the current dashboard/roadmap, repository instructions, package/config, homepage/pathway routes, progress hook/store, dossier, chapter atlas, scene host, timeline, and Three/R3F renderer. The checkout was on `main` with no pending changes at the start. The 10 existing regression tests passed before development.
+
+### Phase 7 verification before Phase 8
+
+No confirmed Phase 7 defect required a code rewrite. In the existing production build, verified queue-title entry, protected narrative, reveal behavior, prerequisite dossier navigation, reveal isolation, shared watch state, Shift+Tab focus containment, Escape dismissal, and restoration to the original opener. A dossier watch action produced 11% journey progress. The same dossier integration was later rechecked from the new graph and the existing movie atlas.
+
+### Phase 8 implementation
+
+- Added an explicit **Prerequisite Lineage & Dependency Graph** entry on each existing pathway page. The graph loads on demand; navigation does not require a new route or WebGL.
+- Graph nodes and edges are derived exclusively from the existing movie catalog and `Movie.prerequisites`. Directed edges are labelled **story prerequisites**, not technology relationships. No content dataset or movie relationships were invented or duplicated.
+- Recursively includes prerequisite ancestors outside the selected journey. These nodes are labelled context only, cannot be marked watched for the current journey, and do not change its totals.
+- Layout groups stories by dependency depth with deterministic positions. This is dependency order, not a new release-date/in-universe chronology system.
+- Selecting a real 3D node, a labelled destination button, the focus selector, or a relationship list item changes the selected story. Incoming/outgoing connections are highlighted; cone arrowheads indicate direction.
+- Full-pathway and selected-prerequisite views support exploring a whole journey or isolating its incoming lineage. Direct prerequisites and dependent stories are also available as readable, clickable lists.
+- Selected nodes open the existing spoiler-protected Movie Dossier System. In-pathway watch/unwatch uses the existing Journey Engine and updates graph completion, queue checkboxes, chapter status, HUD totals, and persistence together.
+- The selected story's metadata and context remain accessible through ordinary controls and dossiers. The graph itself adds no plot text outside existing spoiler protection.
+- Cycles, missing references, duplicate edges, and unknown journeys are handled defensively; invalid references are diagnosed without unbounded recursion. Canonical data produced no diagnostics.
+- The lightweight fallback is a real connected SVG map with directional arrows, selectable nodes, readable destination controls, and native horizontal/vertical keyboard scrolling. It is not an unrelated decorative placeholder.
+
+### Extensible relationship architecture
+
+- `app/lib/prerequisite-graph.ts` owns the current story-only data adapter and ancestor traversal. It reads the canonical catalog rather than introducing another movie model.
+- Scene projections accept explicit node positions and generic directed edge objects. `SceneExplorer` and `SpatialCanvas` render those projections independently of the prerequisite builder. A future curated technology adapter can reuse the renderer and fallback pattern without rebuilding the scene engine.
+- **Planned Phase 8 enhancement:** curate explicit technology entities/relationships and provenance, then add a separate typed relationship adapter and labels. Until those relationships are supplied and reviewed, no technology edges are inferred from movie titles, synopsis, or editorial commentary.
+
+### Cinematic 3D refinements
+
+- Added restrained indigo/blue and violet lighting and layered atmospheric backgrounds while preserving emerald progress/branding and existing scene content.
+- Smoothed camera look-target movement as well as camera position. Camera bounds are computed once per layout and fit the full graph, including the 17-node Chronicle graph.
+- Selected relationships use brighter, thicker connections; unselected connections retain readable contrast without postprocessing or bloom.
+- Moved scene instructions out of the canvas field so labels are not covered by a footer overlay.
+- Rendering/lazy-loading visibility now observes the actual scene viewport, rather than its entire potentially long list/detail section. Offscreen canvas fields stop continuous rendering even while related text remains onscreen.
+- Existing DPR/geometry/particle budgets, low-end fallback, pause controls, reduced-motion branches, and context-loss/error boundaries remain in use. Modal suspension still pauses both graph and atlas.
+- Added a hydration-ready guard to the graph entry action and stacked phone-width focus controls for readable selection.
+- No new dependency, route, canonical movie field, expensive effect, or Phase 9 feature was added.
+
+### Files changed in this run
+
+New:
+
+- `app/lib/prerequisite-graph.ts` — derived story graph, deterministic layout, diagnostics, and incoming-lineage traversal.
+- `app/components/prerequisite-lineage.tsx` — 3D/SVG graph UI, scope/focus controls, relationship navigation, dossier and watch integration.
+- `tests/prerequisite-graph.test.mjs` — six graph regression tests against real data and malformed fixtures.
+
+Modified:
+
+- `app/components/journey-engine-view.tsx` — on-demand graph entry and existing engine/dossier callbacks.
+- `app/components/spatial-scene-types.ts` — optional node positions, reusable directed edges, lineage scene variant.
+- `app/components/spatial-canvas.tsx` — actual dependency connections/arrowheads, camera fitting/target damping, blue/violet light and floor refinements.
+- `app/components/scene-explorer.tsx` — generic edges/fallback support, actual-viewport rendering policy, atmospheric composition, separate instruction strip.
+- `PROJECT_DASHBOARD.md` — verified status, scope clarification, evidence, planned technology lineage, and next phase.
+
+The Phase 7 dossier source, watch-progress store, canonical data, package files, and build configuration were preserved.
+
+### Verification results
+
+- `npm run lint`: **PASS**, no errors/warnings.
+- `npx tsc --noEmit`: **PASS**, no TypeScript errors.
+- `npm run build`: **PASS** using the normal Turbopack script. All existing static/SSG routes generated: `/`, `/_not-found`, `/pathways`, and the three pathway routes.
+- One build attempted while the local production server was still running encountered a Windows `EPERM` creating a prerender-output directory. Stopping the QA server and rerunning the same build succeeded. Keep build and production QA server execution sequential on this Windows checkout. No source/config workaround was added in this run.
+- `node --test tests/watch-progress.test.mjs tests/scene-capability.test.mjs tests/prerequisite-graph.test.mjs`: **PASS, 16/16**. Six new tests cover exact canonical edges, transitive outside-pathway context, deterministic forward-depth layout, lineage filtering, cycles/missing/duplicate references, and empty journeys. Existing progress/data/capability tests still pass.
+- Browser checks used `npm run start` on a local production port, not only a development server. They were tool-driven interactions; no saved end-to-end browser suite is claimed.
+- **Actual 3D selection:** clicked a graph mesh to select Iron Man; the focus selector, selected destination state, metadata, and dependency lists updated. A direct node click at 375px also changed the focused story to Iron Man.
+- **Lineage view:** focusing Iron Man reduced the graph to one node; focusing Endgame showed its three-node/two-edge prerequisite chain. Switching back restored the full graph.
+- **Largest graph:** Chronicle exposed 17 node controls. DOM-projected positions for all 17 labels were checked against the canvas bounds and were inside it. No canonical graph diagnostics were emitted.
+- **Progress:** graph watch action changed Doom Essential to 11%, updated the existing checkbox and chapter status, and survived refresh. Final explicit unwatch restored the initial 0% and unchecked the queue entry. Only the test-created entry was toggled back; no storage clearing, progress migration, or bulk reset was used.
+- **Context isolation:** Nexus included transitive Iron Man/Infinity War/Endgame context. Selecting Iron Man showed outside-pathway status and no current-pathway watch button. Its existing dossier opened for context. Nexus progress remained 0%.
+- **Dossiers:** graph and atlas entry points worked; narrative protection and prerequisite browsing remained intact. A mobile Endgame dossier showed the false-case post-credit guidance. Graph/atlas render modes changed to `on-demand` after the native modal became visible.
+- **2D fallback:** switching removed that scene's canvas and rendered all 17 SVG edges in the Chronicle graph. ArrowRight on the scrollable fallback moved horizontal scroll by 40px. Destination keyboard navigation updated the selected story and could open its dossier.
+- **375×812 layout:** document width was 369px for a 375px viewport, with no horizontal page overflow. The final focus selector measured about 303px wide, controls stacked correctly, the graph rendered in 3D, fallback scrolling worked, and the mobile dossier opened/closed by pointer controls. This is viewport QA, not physical touch-device certification.
+- **Existing features:** checked chapter-2 expansion/focus, the atlas's Loki dossier with series metadata, homepage 3D pathway keyboard selection and destination URL, Begin Your Journey → pathways hub, and the custom invalid-journey 404 (REALITY DESYNCHRONIZATION). No application errors were captured.
+- **Console:** the previously known installed-stack `THREE.Clock` deprecation warning remains; no dependency patch or warning suppression was introduced.
+- Git branch remains `main`. `git diff --check` passes. No commit, push, deployment, new repository, branch switch, or GitHub setting change occurred.
+
+### Known limits and remaining 3D work
+
+- Explicit technology lineage is planned, not implemented or inferred. The current verified graph covers the user-approved story-prerequisite scope.
+- Physical integrated-GPU/8GB laptop and phone frame-time, memory, thermal, and long-session profiling remain unperformed. Bounded rendering is implemented; measured FPS guarantees are not claimed.
+- Actual system reduced-motion, screen-reader/assistive-technology, and fault-injected WebGL context-loss checks remain manual QA items. Code branches, native keyboard behavior, pause/modal suspension, fallback selection, and browser navigation were checked as described above.
+- Larger full graphs intentionally fit smaller on narrow screens; focused-lineage mode and full-size DOM controls provide readable navigation. The 2D map supports native scrolling instead of shrinking all labels into unreadable text.
+- Existing editorial interpretation, unverified streaming availability, last-writer-wins simultaneous localStorage edits, and the known Three clock warning remain as previously documented.
+
+### Next phase from the original roadmap
+
+**Phase 9 — Multiverse Macro Chronology & Timeline Scrubber.** Its original scope is an interactive horizontal timeline with in-universe chronological year and theatrical release-date modes. The pre-existing timeline preview remains; no new Phase 9 implementation was undertaken here.
+
+**Stop for Phase 8 review. Story-prerequisite graph verified; explicit technology lineage remains a planned enhancement.**
+
+
+## Phase 8 Verification + Phase 9 Development — 2026-11-03
+
+### Batch decision and roadmap scope
+
+- Exact Phase 9: **Multiverse Macro Chronology & Timeline Scrubber**.
+- Exact Phase 10: **Incursion Engine & Reality Tear Simulator**.
+- Implemented **Phase 9 only**. The chronology shares the existing spatial renderer, but Phase 10 needs distinct universe-pair, collision, threat-gauge, and alert behavior. Those dependencies are not present. Combining them would expand this batch into an independently scoped simulation without sufficient canonical data. Phase 10 is still **PLANNED**, with no simulated controls or placeholder interactions added. Phase 11 was not started.
+
+### Phase 8 verification and confirmed fix
+
+- Automated graph checks still verify canonical prerequisite edges, transitive context, deterministic layouts, cycle/missing-reference handling, and separation of outside-journey context from tracked progress.
+- Confirmed gap: nodes were selectable but connections were decorative. Added dependent-story activation to 3D connection lines/arrowheads and wider SVG edge hit targets. Existing DOM prerequisite/dependent buttons remain the keyboard equivalent.
+- Production browser: 3D connection selection changed the selected story; SVG arrow selected Endgame; destination arrow-key navigation selected Infinity War. Mobile Nexus graph rendered 12 nodes / 12 connections / 3 outside-pathway context entries with no page overflow.
+- Connections continue to be explicitly described as **story prerequisites**. **Explicit technology lineage relationships remain a planned enhancement**; none were inferred or falsely marked complete.
+- Shared progress, lazy scenes, bounded DPR, low-detail geometry, offscreen/hidden-page demand rendering, manual lightweight mode, reduced-motion handling, and WebGL error boundary/context-loss fallback were preserved. Capability tests verify low-end/data-saver and unavailable/blocked WebGL decisions without allocating contexts on constrained devices.
+
+### Phase 9 features
+
+- Native horizontal, touch-scrollable record strip, discrete event scrubber, previous/next buttons, arrow/Home/End keyboard controls, accessible value descriptions, and responsive journey/chapter filters.
+- Story chronology uses the archive's existing year/date labels. Dated events (2024 and 2025), outside-time events, and undated entries occupy separate spatial lanes. No date was invented for TVA Registry or Phase VI Horizon. Yearless domains are not connected into a fake chronological sequence.
+- Release mode uses six verified US release dates in canonical movie metadata, distinguishes theatrical releases from first streaming premieres, links to official evidence, and spaces the real-time 3D nodes by elapsed release time. No new renderer or dependencies.
+- Mode changes preserve the selected event by ID. Empty chapters show a real empty state and a reset-filter action; other journey queues are untouched.
+- Existing movie dossiers, spoiler shielding, watched-state indicators and watch controls integrated. Narrative details unlock for the selected journey's watched entries or explicit reveal. Opening a dossier suspends scene animation; Escape closes it and restores opener focus.
+- Versioned, validated timeline preferences persist mode, journey, chapter, and selected event separately from watch progress; stable external-store snapshots avoid hydration writes. Cross-tab updates and blocked-storage session fallback are covered. Spoiler reveal is not persisted.
+
+### Verification performed
+
+- `npm run lint`: PASSED.
+- `npx tsc --noEmit`: PASSED.
+- `npm run build`: PASSED, normal Turbopack production build; existing routes preserved. Build attempts hit the pre-existing intermittent Windows EPERM during prerender directory creation. The final run passed after explicitly creating the missing generated `.next/server/app/pathways.segments/pathways` directory; no source/build configuration change or output deletion was used. This environment-specific build instability remains a known limitation.
+- `node --test tests/*.test.mjs`: **22 PASSED / 0 FAILED** (16 existing tests plus 6 chronology/preference tests).
+- Production browser at localhost: scrubber Home/End, mode/selection continuity, refresh persistence, preference cross-tab synchronization, 3D node selection, dossier spoiler shield, animation suspension, Escape/focus restoration, watch toggle and cross-tab journey HUD synchronization, empty chapter recovery, lightweight timeline navigation, and scene pause/on-demand mode.
+- Test watch entry (Loki Season 2, Doom journey) was restored to unwatched and the other tab's HUD returned to 0%. No progress resets or storage clears were used.
+- Desktop 1280px and mobile 375px viewports inspected. Mobile document width 369px within 375px viewport. Mobile graph/controls worked with browser pointer input; physical touch is not claimed.
+- Browser console: no application errors observed; existing dependency `THREE.Clock` deprecation warning remains.
+
+### Files changed in this batch
+
+- `app/components/spatial-timeline.tsx`: timeline controls, filters, progression, dossier integration and spatial chronology.
+- `app/lib/chronology.ts` (new): pure filtering, ordering, date-domain layout and preference validation.
+- `app/lib/timeline-preferences-store.ts` (new): stable client/SSR snapshots, persistence, synchronization and storage fallback.
+- `app/types/event.ts`, `app/data/events.ts`: structured chronology placement alongside preserved original event data.
+- `app/types/movie.ts`, `app/data/movies.ts`: source-backed optional release metadata on six existing entries.
+- `tests/chronology.test.mjs` (new): business logic and preference-store coverage.
+- `app/components/spatial-canvas.tsx`, `app/components/prerequisite-lineage.tsx`, `app/components/scene-explorer.tsx`: incremental Phase 8 connection interaction fix and guidance.
+- `PROJECT_DASHBOARD.md`: this verified record and Phase 9 status. Pre-existing uncommitted Phase 8 integration/model/tests were preserved, including `journey-engine-view.tsx`, `spatial-scene-types.ts`, `prerequisite-graph.ts`, and `prerequisite-graph.test.mjs`.
+
+### Release evidence (verified 2026-11-03)
+
+- Loki Season 1: 2021-06-09, US streaming premiere — https://d23.com/meet-the-characters-of-loki/
+- Spider-Man: No Way Home: 2021-12-17, US theatrical — https://www.marvel.com/movies/spider-man-no-way-home
+- Doctor Strange in the Multiverse of Madness: 2022-05-06, US theatrical — https://www.marvel.com/movies/doctor-strange-in-the-multiverse-of-madness
+- Loki Season 2: 2023-10-05, US streaming premiere — https://press.disneyplus.com/news/disney-plus-shares-loki-season-2-multi-city-fan-event-photos
+- Deadpool & Wolverine: 2024-07-26, US theatrical — https://www.marvel.com/deadpool-and-wolverine-live-red-carpet-premiere
+- The Fantastic Four: First Steps: 2025-07-25, US theatrical — https://www.marvel.com/movies/fantastic-four
+
+Official Marvel search-index release metadata supported the film dates; direct Marvel page retrieval returned 403 in the research tool. Disney/D23 articles were directly readable. Sources record release facts only, not streaming availability.
+
+### Known limitations and next recommended phase
+
+- Chronology covers the **existing six-event archive**, not an exhaustive MCU chronology. Only two events have in-universe years in current data; the remaining domains are intentionally yearless. Story placements are the fan archive's editorial interpretation, not newly verified official canon.
+- Physical touch devices, integrated-GPU/8 GB hardware profiling, OS reduced-motion emulation and forced live WebGL context loss remain manual QA items. Manual lightweight/pause paths were browser-tested; automated capability tests cover unavailable/blocked WebGL.
+- No streaming availability, explicit technology lineage, incursion physics, universe designations, or threat values were invented.
+- Next recommended development: scope and implement **Phase 10 — Incursion Engine & Reality Tear Simulator** as a separate reviewed batch. Stop here for Phase 9 review. No commit, push, deployment, branch switch, or GitHub setting change performed.

@@ -1,5 +1,5 @@
-export type MediaType = "movie" | "series" | "special";
-export type ImportanceLevel = "essential" | "optional";
+export type MediaType = 'movie' | 'series' | 'special';
+export type ImportanceLevel = 'essential' | 'optional';
 
 export interface Movie {
   id: string;
@@ -15,5 +15,11 @@ export interface Movie {
   phase?: number;
   episodes?: number;
   isUpcoming?: boolean;
+  release?: {
+    date: string;
+    territory: 'US';
+    kind: 'theatrical' | 'streaming-premiere';
+    source: string;
+    verifiedOn: string;
+  };
 }
-
