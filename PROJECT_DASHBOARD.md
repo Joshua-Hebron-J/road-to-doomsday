@@ -2,7 +2,7 @@
 
 This living dashboard tracks development progress, milestone criteria, verification results, and subsequent phases for *The Road to Doomsday* cinematic fan archive across the original 21-phase master roadmap.
 
-**Latest verification:** Phase 10 adds the Reality Tear Simulator with deterministic collision mechanics, shared 3D and 2D controls, threat telemetry, and dying reality alerts. Production build and 26 automated tests passed. Earlier entries are historical.
+**Latest verification:** Phase 11 adds a comparison archive for the five roadmap characters. Lint, TypeScript, the production build, and all 30 automated tests passed. Earlier entries are historical.
 
 ---
 
@@ -20,7 +20,7 @@ This living dashboard tracks development progress, milestone criteria, verificat
 | **08** | **Prerequisite Lineage & Dependency Graph** | **INITIAL STORY GRAPH VERIFIED** | 2026-11-02 | Interactive visual node graph displaying precursor story dependencies and technology lineages leading to Doomsday. |
 | **09** | **Multiverse Macro Chronology & Timeline Scrubber** | **IMPLEMENTED / VERIFIED — SIX-EVENT ARCHIVE** | 2026-11-03 | Interactive horizontal timeline scrubber with in-universe chronological year and theatrical release date toggle modes. |
 | **10** | **Incursion Engine & Reality Tear Simulator** | **IMPLEMENTED / VERIFIED** | 2026-11-03 | Interactive dimensional collision simulation, incursion threat gauge, universe designation badges, and dying reality alerts. |
-| **11** | **Character & Variant Lineage Tracker** | **PLANNED** | Pending | Tracking variants across alternate Earths (Doctor Strange, Loki, Reed Richards, Wanda Maximoff, Victor Von Doom). |
+| **11** | **Character & Variant Lineage Tracker** | **IMPLEMENTED / VERIFIED** | 2026-11-03 | Tracking variants across alternate Earths (Doctor Strange, Loki, Reed Richards, Wanda Maximoff, Victor Von Doom). |
 | **12** | **Doctor Doom & Latverian Lore Codex** | **PLANNED** | Pending | Victor Von Doom entity dossier, comic origins vs MCU adaptation, monarch armor analysis, and sovereign philosophical worldview. |
 | **13** | **TVA & Temporal Loom Archives** | **PLANNED** | Pending | TVA regulations, temporal loom mechanics, Void artifacts, and Miss Minutes easter eggs. |
 | **14** | **Interactive Multiverse Map & Realm Nexus** | **PLANNED** | Pending | Spatial visualization of Earth-616, Earth-838, the Void, the Quantum Realm, and Battleworld convergence. |
@@ -478,3 +478,14 @@ Official Marvel search-index release metadata supported the film dates; direct M
 - Verification passed with `npm run lint`, `npx tsc --noEmit`, `node --test tests/*.test.mjs` (26 tests, including four model tests), and `npm run build`. Production browser checks covered the chronology link, playback and pause, keyboard scrubbing and parameters, collision and collapse alerts, 3D rendering, 2D switching, shielding, reset, completion at 100%, and replay restart. The 375px viewport fit without horizontal overflow. Browser error logs were clear.
 - The model is a single fictional pairing with simplified, reversible outcomes. Physical touch hardware, integrated GPU performance, OS reduced-motion emulation, and forced live WebGL context loss remain unverified. Capability tests cover blocked and unavailable WebGL.
 - Changed files include the incursion model and tests, simulator UI and canvas, homepage and chronology integration, and this dashboard. Phase 11 is ready for separate scoping after Phase 10 review. Its roadmap status remains planned.
+
+## Phase 11 — Character & Variant Lineage Tracker — 2026-11-03
+
+- The original roadmap calls for tracking Doctor Strange, Loki, Reed Richards, Wanda Maximoff, and Victor Von Doom across alternate realities. The roadmap provides no separate dependency or acceptance list. The implementation uses the existing media catalog, chapter and journey lookups, Movie Dossier, and journey watch store.
+- The homepage chronology links to the tracker at `/#variants`. It offers 11 curated records across all five lineages, reality filtering, side-by-side comparison, and official source links. Unnumbered branches retain their descriptive labels. Doom’s 2005 screen adaptation and the Doomsday cast announcement have distinct evidence labels, and the announcement leaves his reality undesignated.
+- Catalog records link to the existing dossier and chapter and reflect saved progress in the selected journey. Story notes unlock on matching watch progress or explicit reveal. Filters and spoiler reveal remain session UI state. Legacy and announcement entries carry source references outside the watch catalog.
+- The tracker uses responsive HTML and a short Motion entrance with reduced-motion support. It adds no 3D renderer or dependencies. Physical touch hardware, OS reduced-motion behavior, and integrated graphics performance were not profiled.
+- `npm run lint`, `npx tsc --noEmit`, and `node --test tests/*.test.mjs` passed. All 30 tests passed, including four new tests covering record coverage, filters, catalog references, and spoiler rules. `npm run build` passed on retry after an initial exit during page-data collection without a diagnostic.
+- Production browser checks covered keyboard character selection, all five lineages, reality and journey filters, spoiler reveal, the dossier and Escape focus restoration, watch status updates with original state restored, a valid chapter anchor, and a 375px layout with no horizontal overflow. The chronology scrubber, prerequisite graph, and simulator passed smoke checks.
+- Added `app/data/variants.ts`, `app/lib/variant-lineage.ts`, `app/components/variant-tracker.tsx`, and `tests/variant-lineage.test.mjs`. Updated `app/page.tsx`, `app/components/timeline-preview.tsx`, and this dashboard.
+- Phase 12, Doctor Doom & Latverian Lore Codex, remains planned and ready for separate scoping. The lineage archive is curated, with nine catalog-linked records and two external Doom records.

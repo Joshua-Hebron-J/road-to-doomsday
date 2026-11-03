@@ -90,6 +90,13 @@ export function TimelinePreview() {
           Explore the Reality Tear Simulator ↓
         </a>
 
+        <a
+          href="#variants"
+          className="mb-10 ml-0 inline-flex min-h-11 items-center rounded-lg border border-violet-300/35 px-4 text-sm font-semibold text-violet-200 focus-ring-doom sm:ml-3"
+        >
+          Explore character lineages ↓
+        </a>
+
         {/* Timeline Horizon Cards */}
         <div className="relative border-l border-white/10 ml-4 sm:ml-8 md:ml-32 pl-6 sm:pl-10 space-y-12">
           {CHRONOLOGY_ERAS.map((era, index) => (

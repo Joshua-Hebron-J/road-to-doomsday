@@ -4,6 +4,7 @@ import { Pillars } from "./components/pillars";
 import { PathwaysPreview } from "./components/pathways-preview";
 import { TimelinePreview } from "./components/timeline-preview";
 import { IncursionLab } from "./components/incursion-lab";
+import { VariantTracker } from "./components/variant-tracker";
 import { Footer } from "./components/footer";
 
 export default function Home() {
@@ -16,6 +17,7 @@ export default function Home() {
         <PathwaysPreview />
         <TimelinePreview />
         <IncursionLab />
+        <VariantTracker />
       </main>
       <Footer />
     </div>
