@@ -159,6 +159,7 @@ export function VariantTracker() {
               key={entry.id}
               type="button"
               aria-pressed={entry.id === characterId}
+              data-ambience-cue
               onClick={() => selectCharacter(entry.id)}
               className={`${control} ${entry.id === characterId ? 'bg-violet-950 border-violet-300' : ''}`}
             >

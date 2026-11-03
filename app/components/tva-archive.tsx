@@ -82,6 +82,7 @@ function LoomStudy() {
               key={entry.title}
               type="button"
               aria-pressed={index === i}
+              data-ambience-cue
               onClick={() => setIndex(i)}
               className={`${control} ${index === i ? 'bg-amber-900/60' : ''}`}
             >

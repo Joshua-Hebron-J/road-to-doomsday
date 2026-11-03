@@ -2,7 +2,7 @@
 
 This living dashboard tracks development progress, milestone criteria, verification results, and subsequent phases for *The Road to Doomsday* cinematic fan archive across the original 21-phase master roadmap.
 
-**Latest verification:** Phase 15 adds the journey profile and portable JSON backups with validated import and merge. Lint, TypeScript, production build, and all 41 automated tests passed. Earlier entries are historical.
+**Latest verification:** Phase 16 adds opt-in synthesized ambience and archive interaction cues. Lint, TypeScript, production build, and all 44 automated tests passed. Earlier entries are historical.
 
 ---
 
@@ -25,7 +25,7 @@ This living dashboard tracks development progress, milestone criteria, verificat
 | **13** | **TVA & Temporal Loom Archives** | **IMPLEMENTED / VERIFIED** | 2026-11-03 | TVA regulations, temporal loom mechanics, Void artifacts, and Miss Minutes easter eggs. |
 | **14** | **Interactive Multiverse Map & Realm Nexus** | **IMPLEMENTED / VERIFIED** | 2026-11-03 | Spatial visualization of Earth-616, Earth-838, the Void, the Quantum Realm, and Battleworld convergence. |
 | **15** | **User Profile & Watch Progress Synchronization** | **IMPLEMENTED / VERIFIED — FILE TRANSFER** | 2026-11-03 | Exportable/importable watch states (JSON), backup readiness, and multi-device progress tracking. |
-| **16** | **Cinematic Audio Scapes & Ambience Engine** | **PLANNED** | Pending | Latverian ambient synth hum, temporal loom audio textures, audio mute/toggle control, and interaction sound effects. |
+| **16** | **Cinematic Audio Scapes & Ambience Engine** | **IMPLEMENTED / VERIFIED** | 2026-11-03 | Latverian ambient synth hum, temporal loom audio textures, audio mute/toggle control, and interaction sound effects. |
 | **17** | **Search, Multiverse Filters & Tagging System** | **PLANNED** | Pending | Instant omni-search across movies, characters, phases, and narrative themes with keyboard shortcuts (`Cmd+K`). |
 | **18** | **Watchlist Sharing & Custom Poster Generator** | **PLANNED** | Pending | Custom graphic generator for social sharing, journey completion certificate, and downloadable watch itineraries. |
 | **19** | **Accessibility (a11y) & Screen Reader Hardening** | **PLANNED** | Pending | Comprehensive ARIA live regions, keyboard navigation audit, focus traps for drawers, and automated axe-core compliance. |
@@ -529,4 +529,14 @@ Official Marvel search-index release metadata supported the film dates; direct M
 - Lint, `npx tsc --noEmit`, all 41 automated tests, and production build passed. Three new tests cover independent device stores, merge preservation and persistence, invalid backups, and storage failures.
 - Production browser verification covered keyboard download and merge, file selection, preview before write, reload persistence, journey routing, existing spoiler shield behavior, and the 375px layout without horizontal overflow. Original test watch progress was restored. Browser error logs were clear.
 - Added `app/components/progress-profile.tsx` and `app/lib/watch-backup.ts`. Updated `app/lib/watch-progress-store.ts`, `app/components/journey-engine-view.tsx`, `app/pathways/page.tsx`, `tests/watch-progress.test.mjs`, and this dashboard.
-- File transfer is manual and merge is additive. To propagate unwatched decisions, adjust them on the receiving device. The backup covers watch progress only. Physical devices and browser storage failures were not tested in the production browser. Phase 16, Cinematic Audio Scapes & Ambience Engine, remains planned for separate scoping.
+- File transfer is manual and merge is additive. To propagate unwatched decisions, adjust them on the receiving device. The backup covers watch progress only. Physical devices and browser storage failures were not tested in the production browser.
+
+## Phase 16 — Cinematic Audio Scapes & Ambience Engine
+
+- The shared Archive soundscapes panel offers a Latverian synth hum and Temporal Loom texture. Three synthesized voices and one modulator change frequency smoothly when the visitor switches soundscapes. The sounds are original fan ambience.
+- Audio starts off on every fresh load and requires explicit activation. The selected soundscape persists locally. Turning audio off releases its Web Audio context, and hiding the document turns audio off and releases the context. Returning to the tab requires explicit reactivation. Unsupported playback shows an availability message. The panel uses native keyboard and touch controls with no added motion, network assets, or rendering loop.
+- Variant selection and TVA Loom study controls emit short, throttled cues when audio is on. Existing spoiler and watch-progress rules stay in their respective components.
+- Changed files include the root layout, audio control and synthesis modules, the two cue integrations, and the ambience tests. The automated suite covers preset validation, retuning, and cue throttling, cleanup, and suppression in suspended contexts.
+- Production Chromium checks passed for keyboard activation, scene selection, an interaction cue, mute, reload preference, TVA spoiler reveal and re-seal, and touch controls at 375px without horizontal overflow. The Phase 15 backup preview showed the title and projected total before merge, then zero additions on re-import. Listening quality, physical mobile devices, and other browsers remain unverified.
+- Checkpoint review confirmed that a saved preset stays silent on fresh load. Chromium verified keyboard reactivation and mute with reduced motion, context closure on a simulated tab hide, silence on return, and a safe unavailable message without Web Audio.
+- Phase 17, Search, Multiverse Filters & Tagging System, can be scoped independently. The original roadmap is unchanged.
