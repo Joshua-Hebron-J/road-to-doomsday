@@ -7,6 +7,7 @@ import { IncursionLab } from "./components/incursion-lab";
 import { VariantTracker } from "./components/variant-tracker";
 import { DoomCodex } from "./components/doom-codex";
 import { TvaArchive } from "./components/tva-archive";
+import { RealmNexus } from "./components/realm-nexus";
 import { Footer } from "./components/footer";
 
 export default function Home() {
@@ -22,6 +23,7 @@ export default function Home() {
         <VariantTracker />
         <DoomCodex />
         <TvaArchive />
+        <RealmNexus />
       </main>
       <Footer />
     </div>

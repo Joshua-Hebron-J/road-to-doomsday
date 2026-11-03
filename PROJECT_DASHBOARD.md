@@ -2,7 +2,7 @@
 
 This living dashboard tracks development progress, milestone criteria, verification results, and subsequent phases for *The Road to Doomsday* cinematic fan archive across the original 21-phase master roadmap.
 
-**Latest verification:** Phase 13 adds TVA regulations, an interactive Loom study, Void artifacts, and Miss Minutes extras. Lint, TypeScript, production build, and all 35 automated tests passed. Earlier entries are historical.
+**Latest verification:** Phase 14 adds the five-destination Realm Nexus, a 3D map and lightweight alternative, and a comics convergence study. Lint, TypeScript, production build, and 38 automated tests passed. Earlier entries are historical.
 
 ---
 
@@ -23,7 +23,7 @@ This living dashboard tracks development progress, milestone criteria, verificat
 | **11** | **Character & Variant Lineage Tracker** | **IMPLEMENTED / VERIFIED** | 2026-11-03 | Tracking variants across alternate Earths (Doctor Strange, Loki, Reed Richards, Wanda Maximoff, Victor Von Doom). |
 | **12** | **Doctor Doom & Latverian Lore Codex** | **IMPLEMENTED / VERIFIED** | 2026-11-03 | Victor Von Doom entity dossier, comic origins vs MCU adaptation, monarch armor analysis, and sovereign philosophical worldview. |
 | **13** | **TVA & Temporal Loom Archives** | **IMPLEMENTED / VERIFIED** | 2026-11-03 | TVA regulations, temporal loom mechanics, Void artifacts, and Miss Minutes easter eggs. |
-| **14** | **Interactive Multiverse Map & Realm Nexus** | **PLANNED** | Pending | Spatial visualization of Earth-616, Earth-838, the Void, the Quantum Realm, and Battleworld convergence. |
+| **14** | **Interactive Multiverse Map & Realm Nexus** | **IMPLEMENTED / VERIFIED** | 2026-11-03 | Spatial visualization of Earth-616, Earth-838, the Void, the Quantum Realm, and Battleworld convergence. |
 | **15** | **User Profile & Watch Progress Synchronization** | **PLANNED** | Pending | Exportable/importable watch states (JSON), backup readiness, and multi-device progress tracking. |
 | **16** | **Cinematic Audio Scapes & Ambience Engine** | **PLANNED** | Pending | Latverian ambient synth hum, temporal loom audio textures, audio mute/toggle control, and interaction sound effects. |
 | **17** | **Search, Multiverse Filters & Tagging System** | **PLANNED** | Pending | Instant omni-search across movies, characters, phases, and narrative themes with keyboard shortcuts (`Cmd+K`). |
@@ -510,3 +510,13 @@ Official Marvel search-index release metadata supported the film dates; direct M
 - Production browser checks covered keyboard section selection and all Loom stages, spoiler reveal and resealing, keyboard artifact disclosure and pointer Miss Minutes disclosure at 375px, no horizontal overflow, bidirectional lineage links, dossier Escape and focus restoration, watch-based unlock with original state restored, and a valid chapter destination. Browser error logs were clear.
 - Added `app/data/tva-archive.ts`, `app/components/tva-archive.tsx`, and `tests/tva-archive.test.mjs`. Updated `app/page.tsx`, `app/components/variant-tracker.tsx`, and this dashboard.
 - The archive is curated and its two-dimensional Loom study has no GPU requirement. Physical touch hardware and integrated graphics performance were not profiled. Phase 14, Interactive Multiverse Map & Realm Nexus, remains planned and ready for separate scoping after Phase 13 review.
+
+## Phase 14 — Interactive Multiverse Map & Realm Nexus — 2026-11-03
+
+- The original roadmap calls for spatial visualization of Earth-616, Earth-838, the Void, the Quantum Realm, and Battleworld convergence. It lists no separate dependencies or acceptance checklist. The implementation reuses SceneExplorer, movie dossiers, existing journey and chapter data, and the watch store.
+- The chronology links to the homepage map at `/#realm-nexus`. Five destinations share selection across 3D portals, accessible destination buttons, and the lightweight map pins. The Earth-616 to Earth-838 edge represents the crossing in Multiverse of Madness. Coordinates are editorial. Battleworld is labeled as published Secret Wars comics lore with a reversible illustrated fragment assembly.
+- Four MCU destinations connect to film or season dossiers and Incursion & TVA Nexus chapters. Links also lead to the chronology, incursion simulator, character tracker, TVA archives, and Doom codex. Linked watch progress unlocks story notes. Manual reveals reset on destination change, and comics details require explicit reveal.
+- Lint, `npx tsc --noEmit`, all 38 automated tests, and production build passed. Three new tests cover map records, viewing references, and spoiler rules. Build passed on retry after creating the missing ignored `.next` output directory following Windows EPERM.
+- Production browser checks covered actual 3D picking, keyboard traversal, fragment assembly and separation, resealing spoilers, 375px lightweight map pins and no horizontal overflow, dossier focus restoration, watch unlock with original progress restored, and a valid chapter anchor. No browser errors were recorded.
+- Added `app/data/realms.ts`, `app/components/realm-nexus.tsx`, and `tests/realm-nexus.test.mjs`. Updated `app/page.tsx`, `app/components/timeline-preview.tsx`, and this dashboard.
+- The map is a curated layout with an illustrative comics study. Selection and reveal are transient, while watch state uses existing persistence. Physical touch hardware, integrated GPU performance, OS reduced-motion behavior, and forced context loss were not profiled in this phase. Phase 15, User Profile & Watch Progress Synchronization, remains planned for separate scoping.
