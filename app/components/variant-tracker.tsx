@@ -198,6 +198,14 @@ export function VariantTracker() {
             </select>
           </label>
         </div>
+        {characterId === 'doom' && (
+          <a
+            href="#doom-codex"
+            className="mt-3 inline-flex min-h-11 items-center text-sm text-violet-200 underline focus-ring-doom"
+          >
+            Open the Latverian Lore Codex ↓
+          </a>
+        )}
         {storageError && (
           <p role="status" className="mt-3 text-sm text-amber-200">
             {storageError}

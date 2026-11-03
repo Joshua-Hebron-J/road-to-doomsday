@@ -2,7 +2,7 @@
 
 This living dashboard tracks development progress, milestone criteria, verification results, and subsequent phases for *The Road to Doomsday* cinematic fan archive across the original 21-phase master roadmap.
 
-**Latest verification:** Phase 11 adds a comparison archive for the five roadmap characters. Lint, TypeScript, the production build, and all 30 automated tests passed. Earlier entries are historical.
+**Latest verification:** Phase 12 adds the Doctor Doom dossier, comics and MCU comparison, interactive armor study, and sovereign worldview analysis. Lint, TypeScript, production build, and all 32 tests passed. Earlier entries are historical.
 
 ---
 
@@ -21,7 +21,7 @@ This living dashboard tracks development progress, milestone criteria, verificat
 | **09** | **Multiverse Macro Chronology & Timeline Scrubber** | **IMPLEMENTED / VERIFIED — SIX-EVENT ARCHIVE** | 2026-11-03 | Interactive horizontal timeline scrubber with in-universe chronological year and theatrical release date toggle modes. |
 | **10** | **Incursion Engine & Reality Tear Simulator** | **IMPLEMENTED / VERIFIED** | 2026-11-03 | Interactive dimensional collision simulation, incursion threat gauge, universe designation badges, and dying reality alerts. |
 | **11** | **Character & Variant Lineage Tracker** | **IMPLEMENTED / VERIFIED** | 2026-11-03 | Tracking variants across alternate Earths (Doctor Strange, Loki, Reed Richards, Wanda Maximoff, Victor Von Doom). |
-| **12** | **Doctor Doom & Latverian Lore Codex** | **PLANNED** | Pending | Victor Von Doom entity dossier, comic origins vs MCU adaptation, monarch armor analysis, and sovereign philosophical worldview. |
+| **12** | **Doctor Doom & Latverian Lore Codex** | **IMPLEMENTED / VERIFIED** | 2026-11-03 | Victor Von Doom entity dossier, comic origins vs MCU adaptation, monarch armor analysis, and sovereign philosophical worldview. |
 | **13** | **TVA & Temporal Loom Archives** | **PLANNED** | Pending | TVA regulations, temporal loom mechanics, Void artifacts, and Miss Minutes easter eggs. |
 | **14** | **Interactive Multiverse Map & Realm Nexus** | **PLANNED** | Pending | Spatial visualization of Earth-616, Earth-838, the Void, the Quantum Realm, and Battleworld convergence. |
 | **15** | **User Profile & Watch Progress Synchronization** | **PLANNED** | Pending | Exportable/importable watch states (JSON), backup readiness, and multi-device progress tracking. |
@@ -489,3 +489,14 @@ Official Marvel search-index release metadata supported the film dates; direct M
 - Production browser checks covered keyboard character selection, all five lineages, reality and journey filters, spoiler reveal, the dossier and Escape focus restoration, watch status updates with original state restored, a valid chapter anchor, and a 375px layout with no horizontal overflow. The chronology scrubber, prerequisite graph, and simulator passed smoke checks.
 - Added `app/data/variants.ts`, `app/lib/variant-lineage.ts`, `app/components/variant-tracker.tsx`, and `tests/variant-lineage.test.mjs`. Updated `app/page.tsx`, `app/components/timeline-preview.tsx`, and this dashboard.
 - Phase 12, Doctor Doom & Latverian Lore Codex, remains planned and ready for separate scoping. The lineage archive is curated, with nine catalog-linked records and two external Doom records.
+
+## Phase 12 — Doctor Doom & Latverian Lore Codex — 2026-11-03
+
+- The roadmap specifies the Victor Von Doom dossier, comics origins compared with MCU adaptation, monarch armor analysis, and sovereign worldview. It gives no separate dependency or acceptance list. The codex reuses the Phase 11 casting record and the Doom Essential journey.
+- The homepage codex at `/#doom-codex` links back to the lineage tracker. Selecting Victor Von Doom exposes the codex link. Section URLs support direct return to origins, armor, or worldview.
+- The comics and MCU columns separate published comics history from the official casting announcement. The worldview section labels its editorial reading and cites One World Under Doom.
+- Four accessible armor controls update an original SVG schematic and its explanatory notes. The drawing is an illustrative costume study. Armor selection is transient, while section location is shareable through the URL. The codex adds no renderer, packages, or watch storage.
+- Lint, TypeScript, all 32 automated tests, and production build passed. Two new tests cover reuse of the MCU casting record and valid armor markers.
+- Production browser checks covered links between lineage and codex, keyboard activation of all four armor selections, pointer selection and layout at 375px, section navigation, and the Doom Essential route. Browser error logs were clear. Physical touch and low-end hardware were not profiled.
+- Added `app/data/doom-codex.ts`, `app/components/doom-codex.tsx`, `app/components/doom-armor-study.tsx`, and `tests/doom-codex.test.mjs`. Updated `app/page.tsx`, `app/components/variant-tracker.tsx`, and this dashboard.
+- Phase 13, TVA & Temporal Loom Archives, is ready for separate scoping after review. Its roadmap status remains planned.
