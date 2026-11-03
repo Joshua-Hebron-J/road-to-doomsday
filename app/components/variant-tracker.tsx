@@ -198,6 +198,14 @@ export function VariantTracker() {
             </select>
           </label>
         </div>
+        {characterId === 'loki' && (
+          <a
+            href="#tva-archives"
+            className="mt-3 inline-flex min-h-11 items-center text-sm text-violet-200 underline focus-ring-doom"
+          >
+            Open the TVA archives ↓
+          </a>
+        )}
         {characterId === 'doom' && (
           <a
             href="#doom-codex"

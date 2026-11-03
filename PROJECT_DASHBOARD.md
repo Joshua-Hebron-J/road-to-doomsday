@@ -2,7 +2,7 @@
 
 This living dashboard tracks development progress, milestone criteria, verification results, and subsequent phases for *The Road to Doomsday* cinematic fan archive across the original 21-phase master roadmap.
 
-**Latest verification:** Phase 12 adds the Doctor Doom dossier, comics and MCU comparison, interactive armor study, and sovereign worldview analysis. Lint, TypeScript, production build, and all 32 tests passed. Earlier entries are historical.
+**Latest verification:** Phase 13 adds TVA regulations, an interactive Loom study, Void artifacts, and Miss Minutes extras. Lint, TypeScript, production build, and all 35 automated tests passed. Earlier entries are historical.
 
 ---
 
@@ -22,7 +22,7 @@ This living dashboard tracks development progress, milestone criteria, verificat
 | **10** | **Incursion Engine & Reality Tear Simulator** | **IMPLEMENTED / VERIFIED** | 2026-11-03 | Interactive dimensional collision simulation, incursion threat gauge, universe designation badges, and dying reality alerts. |
 | **11** | **Character & Variant Lineage Tracker** | **IMPLEMENTED / VERIFIED** | 2026-11-03 | Tracking variants across alternate Earths (Doctor Strange, Loki, Reed Richards, Wanda Maximoff, Victor Von Doom). |
 | **12** | **Doctor Doom & Latverian Lore Codex** | **IMPLEMENTED / VERIFIED** | 2026-11-03 | Victor Von Doom entity dossier, comic origins vs MCU adaptation, monarch armor analysis, and sovereign philosophical worldview. |
-| **13** | **TVA & Temporal Loom Archives** | **PLANNED** | Pending | TVA regulations, temporal loom mechanics, Void artifacts, and Miss Minutes easter eggs. |
+| **13** | **TVA & Temporal Loom Archives** | **IMPLEMENTED / VERIFIED** | 2026-11-03 | TVA regulations, temporal loom mechanics, Void artifacts, and Miss Minutes easter eggs. |
 | **14** | **Interactive Multiverse Map & Realm Nexus** | **PLANNED** | Pending | Spatial visualization of Earth-616, Earth-838, the Void, the Quantum Realm, and Battleworld convergence. |
 | **15** | **User Profile & Watch Progress Synchronization** | **PLANNED** | Pending | Exportable/importable watch states (JSON), backup readiness, and multi-device progress tracking. |
 | **16** | **Cinematic Audio Scapes & Ambience Engine** | **PLANNED** | Pending | Latverian ambient synth hum, temporal loom audio textures, audio mute/toggle control, and interaction sound effects. |
@@ -500,3 +500,13 @@ Official Marvel search-index release metadata supported the film dates; direct M
 - Production browser checks covered links between lineage and codex, keyboard activation of all four armor selections, pointer selection and layout at 375px, section navigation, and the Doom Essential route. Browser error logs were clear. Physical touch and low-end hardware were not profiled.
 - Added `app/data/doom-codex.ts`, `app/components/doom-codex.tsx`, `app/components/doom-armor-study.tsx`, and `tests/doom-codex.test.mjs`. Updated `app/page.tsx`, `app/components/variant-tracker.tsx`, and this dashboard.
 - Phase 13, TVA & Temporal Loom Archives, is ready for separate scoping after review. Its roadmap status remains planned.
+
+## Phase 13 — TVA & Temporal Loom Archives — 2026-11-03
+
+- The original roadmap specifies TVA regulations, temporal loom mechanics, Void artifacts, and Miss Minutes easter eggs. It gives no separate dependency or acceptance list. The archive reuses the Loki season records, Incursion & TVA Nexus chapter lookups, existing watch store and Movie Dossier, and Loki lineage entry point.
+- The homepage archive at `/#tva-archives` offers a TVA procedural briefing, four selectable Loom stages, three expandable Void sightings, and three Miss Minutes extras. The SVG is an editorial illustration with illustrative strand counts. Screen events, comics callbacks, and production references carry distinct labels and source links.
+- Story sections respect season-level saved progress in The Incursion & TVA Nexus. Explicit reveal applies to the current section and resets on section change. Dossier navigation retains its own spoiler shield. Archive controls are transient, and persistent watch progress uses the existing store.
+- Lint, `npx tsc --noEmit`, all 35 automated tests, and the production build passed. Three new tests cover existing journey and chapter references, season-specific spoiler eligibility, and Loom states.
+- Production browser checks covered keyboard section selection and all Loom stages, spoiler reveal and resealing, keyboard artifact disclosure and pointer Miss Minutes disclosure at 375px, no horizontal overflow, bidirectional lineage links, dossier Escape and focus restoration, watch-based unlock with original state restored, and a valid chapter destination. Browser error logs were clear.
+- Added `app/data/tva-archive.ts`, `app/components/tva-archive.tsx`, and `tests/tva-archive.test.mjs`. Updated `app/page.tsx`, `app/components/variant-tracker.tsx`, and this dashboard.
+- The archive is curated and its two-dimensional Loom study has no GPU requirement. Physical touch hardware and integrated graphics performance were not profiled. Phase 14, Interactive Multiverse Map & Realm Nexus, remains planned and ready for separate scoping after Phase 13 review.
