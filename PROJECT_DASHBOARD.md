@@ -2,7 +2,7 @@
 
 This living dashboard tracks development progress, milestone criteria, verification results, and subsequent phases for *The Road to Doomsday* cinematic fan archive across the original 21-phase master roadmap.
 
-**Latest verification:** Phase 14 adds the five-destination Realm Nexus, a 3D map and lightweight alternative, and a comics convergence study. Lint, TypeScript, production build, and 38 automated tests passed. Earlier entries are historical.
+**Latest verification:** Phase 15 adds the journey profile and portable JSON backups with validated import and merge. Lint, TypeScript, production build, and all 41 automated tests passed. Earlier entries are historical.
 
 ---
 
@@ -24,7 +24,7 @@ This living dashboard tracks development progress, milestone criteria, verificat
 | **12** | **Doctor Doom & Latverian Lore Codex** | **IMPLEMENTED / VERIFIED** | 2026-11-03 | Victor Von Doom entity dossier, comic origins vs MCU adaptation, monarch armor analysis, and sovereign philosophical worldview. |
 | **13** | **TVA & Temporal Loom Archives** | **IMPLEMENTED / VERIFIED** | 2026-11-03 | TVA regulations, temporal loom mechanics, Void artifacts, and Miss Minutes easter eggs. |
 | **14** | **Interactive Multiverse Map & Realm Nexus** | **IMPLEMENTED / VERIFIED** | 2026-11-03 | Spatial visualization of Earth-616, Earth-838, the Void, the Quantum Realm, and Battleworld convergence. |
-| **15** | **User Profile & Watch Progress Synchronization** | **PLANNED** | Pending | Exportable/importable watch states (JSON), backup readiness, and multi-device progress tracking. |
+| **15** | **User Profile & Watch Progress Synchronization** | **IMPLEMENTED / VERIFIED — FILE TRANSFER** | 2026-11-03 | Exportable/importable watch states (JSON), backup readiness, and multi-device progress tracking. |
 | **16** | **Cinematic Audio Scapes & Ambience Engine** | **PLANNED** | Pending | Latverian ambient synth hum, temporal loom audio textures, audio mute/toggle control, and interaction sound effects. |
 | **17** | **Search, Multiverse Filters & Tagging System** | **PLANNED** | Pending | Instant omni-search across movies, characters, phases, and narrative themes with keyboard shortcuts (`Cmd+K`). |
 | **18** | **Watchlist Sharing & Custom Poster Generator** | **PLANNED** | Pending | Custom graphic generator for social sharing, journey completion certificate, and downloadable watch itineraries. |
@@ -520,3 +520,13 @@ Official Marvel search-index release metadata supported the film dates; direct M
 - Production browser checks covered actual 3D picking, keyboard traversal, fragment assembly and separation, resealing spoilers, 375px lightweight map pins and no horizontal overflow, dossier focus restoration, watch unlock with original progress restored, and a valid chapter anchor. No browser errors were recorded.
 - Added `app/data/realms.ts`, `app/components/realm-nexus.tsx`, and `tests/realm-nexus.test.mjs`. Updated `app/page.tsx`, `app/components/timeline-preview.tsx`, and this dashboard.
 - The map is a curated layout with an illustrative comics study. Selection and reveal are transient, while watch state uses existing persistence. Physical touch hardware, integrated GPU performance, OS reduced-motion behavior, and forced context loss were not profiled in this phase. Phase 15, User Profile & Watch Progress Synchronization, remains planned for separate scoping.
+
+## Phase 15 — User Profile & Watch Progress Synchronization — 2026-11-03
+
+- The original roadmap calls for exportable/importable JSON watch states, backup readiness, and multi-device progress tracking. It gives no separate dependency or acceptance list. The profile reuses the Journey Engine store and catalog. Multi-device transfer uses a user-carried backup file.
+- The profile at `/pathways#progress-profile` shows all three journeys and links to their watch queues. The pathways hub and journey pages link to the profile. Export downloads a versioned JSON file. Import validates the complete file, previews the titles to add and current and projected counts per journey, and asks the visitor to merge or cancel.
+- Merge adds watched IDs to their original journey and preserves local entries. Repeated imports are idempotent. Invalid versions, malformed records, unknown journeys or titles, and oversized files are rejected before saving. Storage write failures keep merged progress in memory and report which journeys need a new export.
+- Lint, `npx tsc --noEmit`, all 41 automated tests, and production build passed. Three new tests cover independent device stores, merge preservation and persistence, invalid backups, and storage failures.
+- Production browser verification covered keyboard download and merge, file selection, preview before write, reload persistence, journey routing, existing spoiler shield behavior, and the 375px layout without horizontal overflow. Original test watch progress was restored. Browser error logs were clear.
+- Added `app/components/progress-profile.tsx` and `app/lib/watch-backup.ts`. Updated `app/lib/watch-progress-store.ts`, `app/components/journey-engine-view.tsx`, `app/pathways/page.tsx`, `tests/watch-progress.test.mjs`, and this dashboard.
+- File transfer is manual and merge is additive. To propagate unwatched decisions, adjust them on the receiving device. The backup covers watch progress only. Physical devices and browser storage failures were not tested in the production browser. Phase 16, Cinematic Audio Scapes & Ambience Engine, remains planned for separate scoping.

@@ -54,6 +54,7 @@ function runtime(storage = new Map(), blocked = false) {
     vm.runInNewContext('(function(require,module,exports){' + output + '\n})', {
       window,
       CustomEvent,
+      TextEncoder,
       console,
     })(
       (name) => load(path.resolve(path.dirname(filename), name + '.ts')),
@@ -63,6 +64,7 @@ function runtime(storage = new Map(), blocked = false) {
     return loadedModule.exports;
   }
   return {
+    backup: load(path.join(__dirname, '../app/lib/watch-backup.ts')),
     store: load(path.join(__dirname, '../app/lib/watch-progress-store.ts'))
       .getProgressStore,
     journey: load(path.join(__dirname, '../app/lib/journey.ts')),
@@ -203,4 +205,86 @@ test('metrics, next recommendation, completion, and isolated reset', () => {
   store.resetProgress();
   assert.deepEqual(ids(store), []);
   assert.deepEqual(ids(other), ['loki-s1']);
+});
+
+test('backup round trip merges across independent device stores and preserves local progress', () => {
+  const origin = runtime();
+  origin.store(doom).markWatched('iron-man');
+  origin.store(nexus).markWatched('loki-s1');
+  const storage = new Map();
+  const receiver = runtime(storage);
+  receiver.store(doom).markWatched('avengers-endgame');
+  const backup = receiver.backup.parseWatchBackup(
+    JSON.stringify(origin.backup.createWatchBackup()),
+  );
+  assert.deepEqual(ids(receiver.store(doom)), ['avengers-endgame']);
+  let updates = 0;
+  const unsubscribe = receiver.store(doom).subscribe(() => updates++);
+  receiver.backup.mergeWatchBackup(backup);
+  assert.deepEqual(ids(receiver.store(doom)), ['avengers-endgame', 'iron-man']);
+  assert.deepEqual(ids(receiver.store(nexus)), ['loki-s1']);
+  assert.ok(updates > 0);
+  const saved = storage.get(key);
+  receiver.backup.mergeWatchBackup(backup);
+  assert.equal(storage.get(key), saved);
+  assert.deepEqual(ids(runtime(storage).store(doom)), [
+    'avengers-endgame',
+    'iron-man',
+  ]);
+  unsubscribe();
+});
+
+test('invalid backups are rejected without changing progress', () => {
+  const r = runtime();
+  r.store(doom).markWatched('iron-man');
+  const backup = r.backup.createWatchBackup();
+  const parse = (value) => r.backup.parseWatchBackup(JSON.stringify(value));
+  assert.throws(() => r.backup.parseWatchBackup('{'), /JSON/);
+  assert.throws(() => r.backup.parseWatchBackup(' '.repeat(65537)), /64 KB/);
+  assert.throws(() => parse({ ...backup, version: 2 }), /supported/);
+  assert.throws(
+    () =>
+      parse({
+        ...backup,
+        journeys: [{ journeyId: 'unknown', watchedIds: [] }],
+      }),
+    /unknown/,
+  );
+  assert.throws(
+    () =>
+      parse({ ...backup, journeys: [backup.journeys[0], backup.journeys[0]] }),
+    /repeated/,
+  );
+  assert.throws(
+    () =>
+      parse({
+        ...backup,
+        journeys: [{ journeyId: doom, watchedIds: ['what-if-s1'] }],
+      }),
+    /outside/,
+  );
+  assert.deepEqual(ids(r.store(doom)), ['iron-man']);
+});
+
+test('import reports session-only progress when storage writes fail and can still export it', () => {
+  const source = runtime();
+  source.store(doom).markWatched('iron-man');
+  const target = runtime();
+  target.failWrites();
+  const result = target.backup.mergeWatchBackup(
+    target.backup.parseWatchBackup(
+      JSON.stringify(source.backup.createWatchBackup()),
+    ),
+  );
+  assert.match(
+    result.find((entry) => entry.journeyId === doom).snapshot.storageError,
+    /session only/,
+  );
+  assert.deepEqual(ids(target.store(doom)), ['iron-man']);
+  assert.equal(
+    target.backup
+      .createWatchBackup()
+      .journeys.find((entry) => entry.journeyId === doom).watchedIds[0],
+    'iron-man',
+  );
 });

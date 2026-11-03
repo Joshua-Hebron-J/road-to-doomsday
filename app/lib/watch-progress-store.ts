@@ -148,6 +148,14 @@ function createStore(journeyId: string) {
     markAllWatched() {
       save([...allowed]);
     },
+    mergeWatched(imported: readonly string[]) {
+      const current = getSnapshot().watchedIds;
+      const additions = [...new Set(imported)].filter(
+        (id) => allowed.has(id) && !current.includes(id),
+      );
+      if (additions.length) save([...current, ...additions]);
+      return getSnapshot();
+    },
     resetProgress() {
       save([], true);
     },

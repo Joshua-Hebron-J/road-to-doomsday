@@ -195,6 +195,13 @@ export function JourneyEngineView({
           </span>
         </nav>
 
+        <Link
+          href="/pathways#progress-profile"
+          className="inline-flex min-h-11 items-center text-sm text-emerald-200 underline focus-ring-doom"
+        >
+          Journey profile and backups
+        </Link>
+
         {/* Sibling Pathway Switcher Pills */}
         <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0">
           <span className="text-[11px] font-mono uppercase text-slate-500 mr-1 hidden sm:inline">
