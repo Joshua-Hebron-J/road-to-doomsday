@@ -86,6 +86,10 @@ export function TimelinePreview() {
           onReveal={() => setReveal((value) => !value)}
         />
 
+        <a href="#incursion" className="mb-10 inline-flex min-h-11 items-center rounded-lg border border-teal-300/35 px-4 text-sm font-semibold text-teal-200 focus-ring-doom">
+          Explore the Reality Tear Simulator ↓
+        </a>
+
         {/* Timeline Horizon Cards */}
         <div className="relative border-l border-white/10 ml-4 sm:ml-8 md:ml-32 pl-6 sm:pl-10 space-y-12">
           {CHRONOLOGY_ERAS.map((era, index) => (

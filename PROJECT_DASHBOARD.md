@@ -2,7 +2,7 @@
 
 This living dashboard tracks development progress, milestone criteria, verification results, and subsequent phases for *The Road to Doomsday* cinematic fan archive across the original 21-phase master roadmap.
 
-**Latest verification:** Phase 8 story graph re-audited; connections now selectable in both 3D and SVG. Phase 9 chronology scrubber implemented for the existing six nexus events. Phase 10 remains planned and was deliberately not combined. Original 21-phase roadmap preserved. See the 2026-11-03 batch entry below for tests and limitations; earlier entries are historical.
+**Latest verification:** Phase 10 adds the Reality Tear Simulator with deterministic collision mechanics, shared 3D and 2D controls, threat telemetry, and dying reality alerts. Production build and 26 automated tests passed. Earlier entries are historical.
 
 ---
 
@@ -19,7 +19,7 @@ This living dashboard tracks development progress, milestone criteria, verificat
 | **07** | **Media Detail System & Cinematic Dossiers** | **IMPLEMENTED / VERIFIED** | 2026-11-02 | Drawer/modal movie dossiers, "Why It Matters" lore analysis, post-credit stinger indicators, and streaming service links. |
 | **08** | **Prerequisite Lineage & Dependency Graph** | **INITIAL STORY GRAPH VERIFIED** | 2026-11-02 | Interactive visual node graph displaying precursor story dependencies and technology lineages leading to Doomsday. |
 | **09** | **Multiverse Macro Chronology & Timeline Scrubber** | **IMPLEMENTED / VERIFIED — SIX-EVENT ARCHIVE** | 2026-11-03 | Interactive horizontal timeline scrubber with in-universe chronological year and theatrical release date toggle modes. |
-| **10** | **Incursion Engine & Reality Tear Simulator** | **PLANNED** | Pending | Interactive dimensional collision simulation, incursion threat gauge, universe designation badges, and dying reality alerts. |
+| **10** | **Incursion Engine & Reality Tear Simulator** | **IMPLEMENTED / VERIFIED** | 2026-11-03 | Interactive dimensional collision simulation, incursion threat gauge, universe designation badges, and dying reality alerts. |
 | **11** | **Character & Variant Lineage Tracker** | **PLANNED** | Pending | Tracking variants across alternate Earths (Doctor Strange, Loki, Reed Richards, Wanda Maximoff, Victor Von Doom). |
 | **12** | **Doctor Doom & Latverian Lore Codex** | **PLANNED** | Pending | Victor Von Doom entity dossier, comic origins vs MCU adaptation, monarch armor analysis, and sovereign philosophical worldview. |
 | **13** | **TVA & Temporal Loom Archives** | **PLANNED** | Pending | TVA regulations, temporal loom mechanics, Void artifacts, and Miss Minutes easter eggs. |
@@ -468,3 +468,13 @@ Official Marvel search-index release metadata supported the film dates; direct M
 - Physical touch devices, integrated-GPU/8 GB hardware profiling, OS reduced-motion emulation and forced live WebGL context loss remain manual QA items. Manual lightweight/pause paths were browser-tested; automated capability tests cover unavailable/blocked WebGL.
 - No streaming availability, explicit technology lineage, incursion physics, universe designations, or threat values were invented.
 - Next recommended development: scope and implement **Phase 10 — Incursion Engine & Reality Tear Simulator** as a separate reviewed batch. Stop here for Phase 9 review. No commit, push, deployment, branch switch, or GitHub setting change performed.
+
+## Phase 10 — Incursion Engine & Reality Tear Simulator — 2026-11-03
+
+- The homepage chronology links to the simulator at `/#incursion`. Earth-616 and Earth-838 are the fixed pair in an illustrative fictional scenario. The lab has independent session state and does not write to journey progress or chronology preferences.
+- The deterministic model evaluates 100 positions across an approximately ten-second run. Convergence controls approach speed. Shielding slows approach and reduces overlap damage. A tear appears at the stress threshold, collision begins when two unit-radius boundaries touch, and overlap damage above the threshold triggers a dying reality alert. A live meter combines stress and damage into a 0–100 threat score.
+- Initiate, pause, resume, scrub, replay, and reset work in both views. Editing a parameter reevaluates the selected position. Replay keeps parameter values and reset restores defaults. Playback pauses while the document is hidden.
+- The default SVG view is interactive through the same keyboard and touch-friendly controls. The optional R3F scene uses lightweight meshes, Drei lines, a capped pixel ratio, and demand rendering when paused, offscreen, or in reduced-motion mode. Capability probing, an error boundary, and context-loss handling select the SVG fallback. Switching views preserves simulation state.
+- Verification passed with `npm run lint`, `npx tsc --noEmit`, `node --test tests/*.test.mjs` (26 tests, including four model tests), and `npm run build`. Production browser checks covered the chronology link, playback and pause, keyboard scrubbing and parameters, collision and collapse alerts, 3D rendering, 2D switching, shielding, reset, completion at 100%, and replay restart. The 375px viewport fit without horizontal overflow. Browser error logs were clear.
+- The model is a single fictional pairing with simplified, reversible outcomes. Physical touch hardware, integrated GPU performance, OS reduced-motion emulation, and forced live WebGL context loss remain unverified. Capability tests cover blocked and unavailable WebGL.
+- Changed files include the incursion model and tests, simulator UI and canvas, homepage and chronology integration, and this dashboard. Phase 11 is ready for separate scoping after Phase 10 review. Its roadmap status remains planned.
