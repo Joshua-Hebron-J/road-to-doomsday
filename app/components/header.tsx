@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
+import { ArchiveSearch } from "./archive-search";
 import { Badge } from "./ui/badge";
 
 export function Header() {
@@ -23,7 +24,7 @@ export function Header() {
           </div>
           <div className="flex flex-col">
             <span className="text-sm font-semibold tracking-[0.22em] text-slate-100 uppercase">
-              The Road to Doomsday
+              <span className="sm:hidden">Doomsday</span><span className="hidden sm:inline">The Road to Doomsday</span>
             </span>
             <span className="text-[10px] tracking-[0.18em] text-emerald-500/80 font-mono uppercase">
               Unofficial Fan Archive
@@ -62,6 +63,7 @@ export function Header() {
           </Link>
         </nav>
 
+        <ArchiveSearch />
         {/* Right Status Badge */}
         <div className="hidden sm:flex items-center gap-4">
           <Badge variant="emerald" size="md" dot pulse>

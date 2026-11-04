@@ -2,7 +2,7 @@
 
 This living dashboard tracks development progress, milestone criteria, verification results, and subsequent phases for *The Road to Doomsday* cinematic fan archive across the original 21-phase master roadmap.
 
-**Latest verification:** Phase 16 adds opt-in synthesized ambience and archive interaction cues. Lint, TypeScript, production build, and all 44 automated tests passed. Earlier entries are historical.
+**Latest verification:** Phase 17 adds archive search with type, MCU phase and editorial theme filters, keyboard shortcuts and protected movie dossiers. Lint, TypeScript, production build and all 47 automated tests passed. Earlier entries are historical.
 
 ---
 
@@ -26,7 +26,7 @@ This living dashboard tracks development progress, milestone criteria, verificat
 | **14** | **Interactive Multiverse Map & Realm Nexus** | **IMPLEMENTED / VERIFIED** | 2026-11-03 | Spatial visualization of Earth-616, Earth-838, the Void, the Quantum Realm, and Battleworld convergence. |
 | **15** | **User Profile & Watch Progress Synchronization** | **IMPLEMENTED / VERIFIED — FILE TRANSFER** | 2026-11-03 | Exportable/importable watch states (JSON), backup readiness, and multi-device progress tracking. |
 | **16** | **Cinematic Audio Scapes & Ambience Engine** | **IMPLEMENTED / VERIFIED** | 2026-11-03 | Latverian ambient synth hum, temporal loom audio textures, audio mute/toggle control, and interaction sound effects. |
-| **17** | **Search, Multiverse Filters & Tagging System** | **PLANNED** | Pending | Instant omni-search across movies, characters, phases, and narrative themes with keyboard shortcuts (`Cmd+K`). |
+| **17** | **Search, Multiverse Filters & Tagging System** | **IMPLEMENTED / VERIFIED** | 2026-11-04 | Instant omni-search across movies, characters, phases, and narrative themes with keyboard shortcuts (`Cmd+K`). |
 | **18** | **Watchlist Sharing & Custom Poster Generator** | **PLANNED** | Pending | Custom graphic generator for social sharing, journey completion certificate, and downloadable watch itineraries. |
 | **19** | **Accessibility (a11y) & Screen Reader Hardening** | **PLANNED** | Pending | Comprehensive ARIA live regions, keyboard navigation audit, focus traps for drawers, and automated axe-core compliance. |
 | **20** | **Performance Optimization & Offline PWA** | **PLANNED** | Pending | Asset preloading, service worker caching for offline viewing, bundle optimization, and image format audits. |
@@ -540,3 +540,18 @@ Official Marvel search-index release metadata supported the film dates; direct M
 - Production Chromium checks passed for keyboard activation, scene selection, an interaction cue, mute, reload preference, TVA spoiler reveal and re-seal, and touch controls at 375px without horizontal overflow. The Phase 15 backup preview showed the title and projected total before merge, then zero additions on re-import. Listening quality, physical mobile devices, and other browsers remain unverified.
 - Checkpoint review confirmed that a saved preset stays silent on fresh load. Chromium verified keyboard reactivation and mute with reduced motion, context closure on a simulated tab hide, silence on return, and a safe unavailable message without Web Audio.
 - Phase 17, Search, Multiverse Filters & Tagging System, can be scoped independently. The original roadmap is unchanged.
+
+## Phase 17 — Search, Multiverse Filters & Tagging System
+
+- The shared header opens a native modal archive search with Cmd+K or Ctrl+K, automatic search focus, Escape dismissal, and focus restoration. The responsive header keeps search available on mobile.
+- Instant results cover every catalog title, the five existing character identities, catalog MCU phases, and editorial chapter themes. Multiple query words combine with type, phase and theme filters. Clear filters and a zero-results message support recovery.
+- Tags derive from existing media type, importance, release year, phase and chapter membership. The index excludes movie synopsis, narrative significance and variant story descriptions. Chapter themes remain explicitly editorial.
+- Movie results use the existing Movie Dossier with its spoiler shield and journey-specific watch store. Phase results filter the title queue. Themes link to the original chapter trigger. Character links select the corresponding tracker identity while resetting reality and spoiler reveal state.
+- Dependencies are the existing catalog, chapters, journeys, character records and Movie Dossier. No packages or data models were added. Search uses no WebGL, animation or audio activation.
+- Verified lint, TypeScript, production build and all 47 automated tests. Three new tests cover catalog coverage and ranking, intersecting filters, invalid themes, internal destinations and exclusion of protected narrative content.
+- Production Chromium verified Ctrl+K, keyboard interaction, protected unwatched dossier content, phase filtering, empty results, character selection, silent audio state, reduced motion, close focus restoration and a 375px layout without horizontal overflow. The mobile screenshot was inspected. Existing watch-progress persistence remains covered by the automated store suite.
+- Modified files are app/components/header.tsx and app/components/variant-tracker.tsx. Added app/components/archive-search.tsx, app/lib/archive-search.ts and tests/archive-search.test.mjs. This dashboard records verification.
+- Limitations include substring matching within the local catalog and physical devices and other browsers remaining unverified. Search criteria stay in the current component session and reset on a full reload. Phase 16 audio lifecycle behavior was unchanged.
+- Phase 17 implementation began at local bf6ffbc while GitHub still showed f10bdec2. At checkpoint review, origin/main and GitHub were verified at bf6ffbc. The six Phase 17 files were reviewed for correctness, secrets, generated artifacts and unrelated changes.
+- Checkpoint review added explicit Tab and Shift+Tab wrapping to the search dialog. Production Chromium passed Ctrl+K and Cmd+K, both focus boundaries, Enter result selection, nested dossier Escape and focus restoration, combined filters, empty results, chapter and character destinations, zero AudioContext allocation and 375px layout. All 47 tests, lint, TypeScript and production build passed again. Duplicate result identity is asserted in the automated suite.
+- Phase 18, Watchlist Sharing & Custom Poster Generator, is ready for separate scoping.

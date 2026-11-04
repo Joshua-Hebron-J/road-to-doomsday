@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import { CHARACTERS, type CharacterId, type Variant } from '../data/variants';
 import { useWatchProgress } from '../hooks/use-watch-progress';
@@ -122,6 +122,25 @@ export function VariantTracker() {
   ];
   const variants = getVariants(characterId, reality);
 
+  useEffect(() => {
+    function navigateCharacter() {
+      const id = window.location.hash.slice("#character-".length);
+      if (!window.location.hash.startsWith("#character-")) return;
+      const entry = CHARACTERS.find((character) => character.id === id);
+      if (entry) {
+        setCharacter(entry.id);
+        setReality("");
+        setRevealed(false);
+      }
+    }
+    const frame = requestAnimationFrame(navigateCharacter);
+    window.addEventListener("hashchange", navigateCharacter);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("hashchange", navigateCharacter);
+    };
+  }, []);
+
   function selectCharacter(id: CharacterId) {
     setCharacter(id);
     setReality('');
@@ -157,6 +176,7 @@ export function VariantTracker() {
           {CHARACTERS.map((entry) => (
             <button
               key={entry.id}
+              id={"character-" + entry.id}
               type="button"
               aria-pressed={entry.id === characterId}
               data-ambience-cue
