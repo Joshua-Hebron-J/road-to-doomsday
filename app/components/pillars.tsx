@@ -83,7 +83,7 @@ export function Pillars() {
               >
                 <div>
                   <div className="flex items-center justify-between mb-8">
-                    <span className="font-mono text-2xl font-black tracking-widest text-slate-500 group-hover:text-slate-300 transition-colors">
+                    <span className="font-mono text-2xl font-black tracking-widest text-slate-400 group-hover:text-slate-300 transition-colors">
                       {pillar.number}
                     </span>
                     <Badge variant={pillar.badgeVariant} size="sm">

@@ -1,5 +1,7 @@
 "use client";
 
+import { trapDialogFocus } from '../lib/accessibility';
+
 import { useEffect, useRef, useState } from "react";
 import { searchArchive, searchIndex, searchThemes } from "../lib/archive-search";
 import { getAllJourneys } from "../lib/journey";
@@ -52,28 +54,19 @@ export function ArchiveSearch() {
 
   return (
     <>
-      <button type="button" onClick={open} className={control} aria-haspopup="dialog" aria-label="Search archive">
-        Search <span className="hidden lg:inline text-slate-400">⌘/Ctrl K</span>
+      <button type="button" onClick={open} className={control} aria-haspopup="dialog" aria-label="Search archive" aria-keyshortcuts="Control+k Meta+k" title="Search archive (Ctrl+K or Cmd+K)">
+        Search
       </button>
       <dialog
         ref={dialog}
         aria-labelledby="archive-search-title"
         onClose={() => opener.current?.focus()}
         onKeyDown={(event) => {
-          if (event.key !== "Tab") return;
-          const controls = Array.from(
-            event.currentTarget.querySelectorAll<HTMLElement>(
-              "button:not([disabled]), a[href], input:not([disabled]), select:not([disabled])",
-            ),
-          ).filter((element) => element.getClientRects().length > 0);
-          const first = controls[0];
-          const last = controls.at(-1);
-          if (event.shiftKey && document.activeElement === first) {
+          if (event.key === 'Escape') {
             event.preventDefault();
-            last?.focus();
-          } else if (!event.shiftKey && document.activeElement === last) {
-            event.preventDefault();
-            first?.focus();
+            close();
+          } else {
+            trapDialogFocus(event, event.currentTarget);
           }
         }}
         className="fixed m-auto max-h-[90dvh] w-[calc(100%-1.5rem)] max-w-3xl overflow-y-auto rounded-2xl border border-emerald-400/30 bg-[#090e15] p-4 text-white shadow-2xl backdrop:bg-black/85 sm:p-7"

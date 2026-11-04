@@ -257,6 +257,9 @@ export function SceneExplorer({
             </button>
           ))}
         </div>
+        <p role="status" aria-atomic="true" className="sr-only">
+          Selected {selected.label}. {selected.caption}
+        </p>
         <motion.div
           key={selected.id}
           initial={reducedMotion ? false : { opacity: 0, rotateY: -5, y: 6 }}
@@ -265,7 +268,7 @@ export function SceneExplorer({
           style={{ transformPerspective: 1000 }}
           className="rounded-xl border border-white/10 bg-surface-2/60 p-4 sm:p-5 space-y-3"
         >
-          <div aria-live="polite" aria-atomic="true">
+          <div>
             <h3 className="text-base sm:text-lg font-semibold text-slate-100">
               {selected.label}
             </h3>

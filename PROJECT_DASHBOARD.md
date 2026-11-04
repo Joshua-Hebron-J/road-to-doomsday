@@ -2,7 +2,7 @@
 
 This living dashboard tracks development progress, milestone criteria, verification results, and subsequent phases for *The Road to Doomsday* cinematic fan archive across the original 21-phase master roadmap.
 
-**Latest verification:** Phase 18 adds journey sharing, customized PNG posters, completion certificates and downloadable itineraries. Lint, TypeScript, production build and all 51 automated tests passed. Production Chromium verified exports, completion eligibility, mobile layout and fallback behavior. Earlier entries are historical.
+**Latest verification:** Phase 19 adds accessibility and screen reader hardening. Lint, TypeScript, production build, all 54 unit tests and 39 axe scans passed with zero reported violations. Checkpoint review categorized the incomplete results, fixed confirmed forced-color and focus defects, and recorded manual findings and assistive-technology limits below. Earlier entries are historical.
 
 ---
 
@@ -28,7 +28,7 @@ This living dashboard tracks development progress, milestone criteria, verificat
 | **16** | **Cinematic Audio Scapes & Ambience Engine** | **IMPLEMENTED / VERIFIED** | 2026-11-03 | Latverian ambient synth hum, temporal loom audio textures, audio mute/toggle control, and interaction sound effects. |
 | **17** | **Search, Multiverse Filters & Tagging System** | **IMPLEMENTED / VERIFIED** | 2026-11-04 | Instant omni-search across movies, characters, phases, and narrative themes with keyboard shortcuts (`Cmd+K`). |
 | **18** | **Watchlist Sharing & Custom Poster Generator** | **IMPLEMENTED / VERIFIED** | 2026-11-04 | Custom graphic generator for social sharing, journey completion certificate, and downloadable watch itineraries. |
-| **19** | **Accessibility (a11y) & Screen Reader Hardening** | **PLANNED** | Pending | Comprehensive ARIA live regions, keyboard navigation audit, focus traps for drawers, and automated axe-core compliance. |
+| **19** | **Accessibility (a11y) & Screen Reader Hardening** | **IMPLEMENTED / VERIFIED** | 2026-11-04 | Comprehensive ARIA live regions, keyboard navigation audit, focus traps for drawers, and automated axe-core compliance. |
 | **20** | **Performance Optimization & Offline PWA** | **PLANNED** | Pending | Asset preloading, service worker caching for offline viewing, bundle optimization, and image format audits. |
 | **21** | **Pre-Doomsday Countdown & Launch Polish** | **PLANNED** | Pending | Live theatrical countdown clock to Avengers: Doomsday release, final cross-browser validation, and release readiness. |
 
@@ -573,3 +573,75 @@ Official Marvel search-index release metadata supported the film dates; direct M
 - Checkpoint review verified all six files for correctness, secrets, generated artifacts and unrelated changes. Lint, TypeScript, all 51 tests and production build passed again. Fresh Chromium contexts loaded all three public journey routes without authentication or access to creator storage, preserving public information while leaving private name and watch status absent. Progress disclosure remained off by default, and an unwatched dossier stayed protected.
 - Clipboard denial selected the full public URL for manual copying. Missing native file sharing reported its PNG fallback. Failed PNG encoding and unavailable Canvas2D preserved itinerary downloading. PNG dimensions, certificate eligibility, keyboard export, reduced motion, 375px touch layout and silent audio were reverified.
 - Git baseline was clean main synchronized with origin/main at 2c5fbf54. Phase 18 checkpoint preparation was approved separately. Phase 19, Accessibility (a11y) & Screen Reader Hardening, is ready for separate scoping.
+
+
+## Phase 19 — Accessibility (a11y) & Screen Reader Hardening
+
+- The original scope covers comprehensive ARIA live regions, keyboard navigation auditing, focus traps for drawers and automated axe-core compliance. The implementation reuses existing progress stores, native controls, dialogs and scene navigation.
+- Skip to main content is the first page link and targets a focusable main landmark on the homepage, pathways index, all journey routes and the custom 404 page. Focus styles also support forced colors, and hash destinations account for the fixed header.
+- Mobile and tablet navigation has a named landmark, associated toggle, 44px touch target, Escape dismissal and focus restoration. Responsive breakpoints keep the controls within the header at intermediate widths.
+- Search, Movie Dossiers and progress reset use one tested focus helper. It excludes disabled, hidden, inert and programmatic-only controls, wraps both ends, handles a focused dossier heading and recovers outside focus. Dossiers explicitly restore the opener on cleanup. Search explicitly dismisses on Escape even when a filled native search input would otherwise consume the key.
+- Search exposes Ctrl+K and Cmd+K with aria-keyshortcuts and a tooltip. Map-pin accessible names match the visible number and realm name. Chapter completion bars now have a progressbar role, bounds, numeric value and readable count.
+- Journey watch progress, dossier reveal/watch state and scene selection have stable, concise polite announcements. The scene announcement sits outside the changing animation container. Backup previews and cancellation announce their status without changing the existing additive import logic.
+- Existing low-contrast muted labels use the brighter slate token. The 404 display is readable. Contrast changes reuse the existing palette and leave story content and data intact.
+- Added development-only @axe-core/playwright and playwright-core dependencies and npm run test:a11y. The audit uses an isolated browser context, constrained-device lightweight controls and reduced motion. It scans all six routes at 1280px and 375px, plus search, dossiers, reset, prerequisite graph, sharing, import, simulator, TVA, armor, character and realm states. No axe rules are disabled.
+- Verified npm run lint, npx tsc --noEmit, node --test tests/*.test.mjs and npm run build. All 54 unit tests passed, including three new focus regressions. The production build passed after recovering a Windows EPERM error while creating a generated prerender directory.
+- npm run test:a11y passed 39 axe scans with zero reported violations. Keyboard assertions cover skip navigation, Ctrl+K/Cmd+K, filled-search Escape, Tab/Shift+Tab wrapping, nested dossier dismissal and focus return, reset cancellation, watch persistence after reload, scene arrow navigation and archive controls. Backup announcements, default-off progress disclosure, touch navigation and silent audio were also checked.
+- Additional browser checks verified focus visibility, forced-color 2px outlines, and header control bounds at 375, 768, 1024, 1280 and 1536px. Mobile skip-link and navigation captures were visually inspected. No screenshots or browser binaries were added to the repository.
+- To repeat the browser audit, run a production server on port 3009 and npm run test:a11y in another terminal. A11Y_BASE_URL can select a different server. Install a Playwright Chromium browser with npx playwright-core install chromium --only-shell, or set A11Y_BROWSER_EXECUTABLE or A11Y_BROWSER_CHANNEL to an available browser. The axe dependency requires Node 22.12 or later; verification used Node 24.16.
+- The 38 automated incomplete results were categorized and checked through source review, rendered samples and keyboard interaction at checkpoint review below. Exhaustive per-pixel verification across all layered and animated backgrounds remains unverified. NVDA, JAWS, VoiceOver, physical devices and non-Chromium browsers were not tested. This cycle audited the keyboard-equivalent lightweight scenes, with GPU visuals unchanged. Automated success does not establish full WCAG conformance.
+- The baseline was clean main synchronized with origin/main at 613ecfa14. Phase 19 checkpoint review and its local commit were authorized separately. Phase 20, Performance Optimization & Offline PWA, is ready for separate scoping.
+
+### Files added or modified in Phase 19
+
+- PROJECT_DASHBOARD.md
+- app/components/archive-search.tsx
+- app/components/choose-your-path-client.tsx
+- app/components/footer.tsx
+- app/components/header.tsx
+- app/components/hero.tsx
+- app/components/journey-engine-view.tsx
+- app/components/movie-dossier.tsx
+- app/components/pathways-preview.tsx
+- app/components/pillars.tsx
+- app/components/progress-profile.tsx
+- app/components/realm-nexus.tsx
+- app/components/scene-explorer.tsx
+- app/components/timeline-preview.tsx
+- app/components/ui/card.tsx
+- app/globals.css
+- app/layout.tsx
+- app/lib/accessibility.ts
+- app/not-found.tsx
+- app/page.tsx
+- app/pathways/[id]/page.tsx
+- app/pathways/page.tsx
+- package-lock.json
+- package.json
+- scripts/a11y-audit.mjs
+- tests/accessibility.test.mjs
+
+
+### Phase 19 checkpoint review
+
+- All 26 changed files were reviewed for correctness, security, secrets, generated artifacts and unrelated changes. The added dependencies remain development-only. No environment files, browser binaries, raw audit reports or screenshots are included in the repository.
+- The original 38 incomplete records comprised 36 color-contrast records and two label-content-name-mismatch records. They are rule results spanning repeated UI states, not 38 distinct failing elements. The original report covered 330 distinct rule/selector combinations; after fixes and changed scroll positions the final report covers 334.
+- Contrast categories include gradient and translucent backgrounds, partial clipping/occlusion during scrolling, SVG/image labels, pseudo-element decoration, symbolic or short text, and empty native fields. Categories overlap. Source and rendered review covered these categories, with numeric measurements on representative headings, actions, diagram labels and muted text. It does not establish contrast for every pixel of every visual state.
+- Both label-matching records refer to the same two icon-only timeline arrow controls at desktop and mobile widths. Their Previous timeline event and Next timeline event accessible names were checked against the actual keyboard-operated slider movement. Their names describe the actions correctly.
+- Manual review found and fixed transparent gradient text disappearing in forced colors. The final forced-color overrides follow the cinematic styles, use CanvasText, clear decorative filters and shadows, and give progress bars a CanvasText boundary with Highlight fill. Both light and dark forced-color palettes were visually inspected. Normal presentation intentionally retains the dark design under either system preference.
+- Reverse-Tab traversal exposed controls hidden behind the fixed header. Root scroll padding now reserves its space. A subsequent traversal of 80 Tab and 80 Shift+Tab actions found no obscured focused controls, and the automated suite now checks reverse traversal. Skip navigation, dialog traps, Escape, focus return and forced-color outlines passed.
+- The reset confirmation hover uses a darker red to maintain readable white text. Measured contrast was 4.77:1 at rest and 6.42:1 on hover.
+
+| Representative contrast check | Minimum measured ratio | Required ratio |
+| --- | --- | --- |
+| Silver heading gradient stops against sampled background | 3.93:1 | 3:1 |
+| Emerald heading gradient stops against sampled background | 5.25:1 | 3:1 |
+| Primary journey action | 9.24:1 | 4.5:1 |
+| SVG Earth-616 label | 11.70:1 | 4.5:1 |
+| Realm map label | 7.29:1 | 4.5:1 |
+| Muted footer text | 7.74:1 | 4.5:1 |
+
+- The browser suite still reports 38 incomplete records with no disabled rules. Categorization and representative review found no additional blocking defect after the fixes. The remaining uncertainty is exhaustive contrast across complex animated/GPU states and behavior with actual assistive technology and other devices.
+- Final lint, TypeScript, all 54 unit tests, production build and the 39-scan axe suite passed. There were zero axe violations. Forced-color heading and progress-bar assertions were added. Optional A11Y_REPORT_PATH writes the raw violations/incomplete records to a caller-selected JSON file for repeatable triage.
+- Sharing privacy was rechecked with anonymous fresh browser contexts for all three journey links. Creator name and watch progress stayed private, optional disclosure stayed off by default, and dossier details stayed protected. Clipboard denial, unavailable native sharing and failed PNG encoding kept their documented fallbacks.
+- The final 375px layout, touch navigation, focus visibility, live-region content, progressbar attributes, watch persistence and default-silent audio passed browser checks. Header bounds and forced-color focus outlines also passed at the previously documented viewport sizes. No Phase 20 implementation was started.

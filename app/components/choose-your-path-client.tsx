@@ -181,7 +181,7 @@ export function ChooseYourPathClient() {
           <Badge variant="emerald" size="sm" dot pulse>
             Phase 4: Active Milestone
           </Badge>
-          <span className="text-xs font-mono text-slate-500 hidden sm:inline">
+          <span className="text-xs font-mono text-slate-400 hidden sm:inline">
             3 ARCHIVAL PATHS READY
           </span>
         </div>
@@ -205,7 +205,7 @@ export function ChooseYourPathClient() {
         {/* Quick Stats Metric Strip */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 font-mono text-center">
           <div className="p-3 rounded-lg bg-surface-1/70 border border-white/5">
-            <span className="text-[10px] uppercase text-slate-500 block tracking-wider">
+            <span className="text-[10px] uppercase text-slate-400 block tracking-wider">
               Pathways
             </span>
             <span className="text-lg font-bold text-slate-200 mt-0.5 block">
@@ -213,7 +213,7 @@ export function ChooseYourPathClient() {
             </span>
           </div>
           <div className="p-3 rounded-lg bg-surface-1/70 border border-white/5">
-            <span className="text-[10px] uppercase text-slate-500 block tracking-wider">
+            <span className="text-[10px] uppercase text-slate-400 block tracking-wider">
               Curated Pool
             </span>
             <span className="text-lg font-bold text-emerald-400 mt-0.5 block">
@@ -221,7 +221,7 @@ export function ChooseYourPathClient() {
             </span>
           </div>
           <div className="p-3 rounded-lg bg-surface-1/70 border border-white/5">
-            <span className="text-[10px] uppercase text-slate-500 block tracking-wider">
+            <span className="text-[10px] uppercase text-slate-400 block tracking-wider">
               Runtime Spectrum
             </span>
             <span className="text-lg font-bold text-slate-200 mt-0.5 block">
@@ -229,7 +229,7 @@ export function ChooseYourPathClient() {
             </span>
           </div>
           <div className="p-3 rounded-lg bg-surface-1/70 border border-white/5">
-            <span className="text-[10px] uppercase text-slate-500 block tracking-wider">
+            <span className="text-[10px] uppercase text-slate-400 block tracking-wider">
               Destination
             </span>
             <span className="text-lg font-bold text-amber-400 mt-0.5 block">
@@ -294,7 +294,7 @@ export function ChooseYourPathClient() {
 
         {/* View Layout Mode (Dossier Cards vs Matrix) */}
         <div className="flex items-center gap-2 font-mono text-xs text-slate-400 w-full md:w-auto justify-end">
-          <span className="text-[11px] uppercase text-slate-500">Format:</span>
+          <span className="text-[11px] uppercase text-slate-400">Format:</span>
           <button
             type="button"
             onClick={() => setViewMode("dossiers")}
@@ -444,7 +444,7 @@ export function ChooseYourPathClient() {
                             <span className="text-slate-200 font-medium block truncate">
                               {ch.title}
                             </span>
-                            <span className="text-slate-500 font-mono text-[10px] block">
+                            <span className="text-slate-400 font-mono text-[10px] block">
                               {ch.movieIds.length} Canonical Entries
                             </span>
                           </div>
@@ -464,7 +464,7 @@ export function ChooseYourPathClient() {
 
                       <div className="grid grid-cols-2 gap-4 text-center">
                         <div className="p-3 rounded bg-surface-2/60 border border-white/5">
-                          <span className="text-[10px] text-slate-500 uppercase tracking-wider block">
+                          <span className="text-[10px] text-slate-400 uppercase tracking-wider block">
                             Estimated Runtime
                           </span>
                           <span className="text-xl font-bold text-slate-100 mt-1 block">
@@ -476,7 +476,7 @@ export function ChooseYourPathClient() {
                         </div>
 
                         <div className="p-3 rounded bg-surface-2/60 border border-white/5">
-                          <span className="text-[10px] text-slate-500 uppercase tracking-wider block">
+                          <span className="text-[10px] text-slate-400 uppercase tracking-wider block">
                             Total Scope
                           </span>
                           <span className="text-xl font-bold text-emerald-400 mt-1 block">
@@ -538,7 +538,7 @@ export function ChooseYourPathClient() {
                       >
                         Enter {journey.title} Dossier &rarr;
                       </Button>
-                      <span className="block text-center text-[11px] font-mono text-slate-500 mt-2">
+                      <span className="block text-center text-[11px] font-mono text-slate-400 mt-2">
                         Navigates to dedicated trajectory route: /pathways/{journey.id}
                       </span>
                     </div>
@@ -592,7 +592,7 @@ export function ChooseYourPathClient() {
                 {journeyData.map(({ journey, stats }) => (
                   <td key={journey.id} className="py-4 px-4 font-mono font-bold text-slate-100">
                     {stats.formattedRuntime}
-                    <span className="block text-[10px] font-normal text-slate-500">
+                    <span className="block text-[10px] font-normal text-slate-400">
                       ({stats.totalRuntimeMinutes} minutes)
                     </span>
                   </td>

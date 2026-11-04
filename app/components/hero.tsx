@@ -177,7 +177,7 @@ export function Hero() {
         initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.7, duration: 0.8 }}
-        className="mt-12 flex flex-col items-center gap-2 text-slate-500 select-none"
+        className="mt-12 flex flex-col items-center gap-2 text-slate-400 select-none"
         aria-hidden="true"
       >
         <span className="text-[10px] uppercase tracking-[0.25em] font-mono">

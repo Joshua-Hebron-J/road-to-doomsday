@@ -54,7 +54,7 @@ export default async function PathwayDetailPage({ params }: PageProps) {
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
       <Header />
-      <main className="flex-1 pt-24 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+      <main id="main-content" tabIndex={-1} className="flex-1 pt-24 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
         <JourneyEngineView key={journey.id} journey={journey} chapters={chapters} />
       </main>
       <Footer />

@@ -1,5 +1,7 @@
 'use client';
 
+import { trapDialogFocus } from '../lib/accessibility';
+
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { motion, useReducedMotion } from 'motion/react';
@@ -40,6 +42,7 @@ export default function MovieDossier({
 
   useEffect(() => {
     const element = dialog.current;
+    const previousFocus = document.activeElement;
     const overflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     element?.showModal();
@@ -47,6 +50,8 @@ export default function MovieDossier({
     return () => {
       element?.close();
       document.body.style.overflow = overflow;
+      if (previousFocus instanceof HTMLElement && previousFocus.isConnected)
+        previousFocus.focus({ preventScroll: true });
     };
   }, []);
 
@@ -92,26 +97,13 @@ export default function MovieDossier({
       onClick={(event) => {
         if (event.target === event.currentTarget) setClosing(true);
       }}
-      onKeyDown={(event) => {
-        if (event.key !== 'Tab') return;
-        const elements = Array.from(
-          dialog.current?.querySelectorAll<HTMLElement>(
-            'button:not([disabled]), a[href], [tabindex="0"]',
-          ) ?? [],
-        ).filter((element) => element.getClientRects().length > 0);
-        const first = elements[0];
-        const last = elements.at(-1);
-        if (!first || !last) return;
-        if (event.shiftKey && document.activeElement === first) {
-          event.preventDefault();
-          last.focus();
-        } else if (!event.shiftKey && document.activeElement === last) {
-          event.preventDefault();
-          first.focus();
-        }
-      }}
+      onKeyDown={(event) => trapDialogFocus(event, event.currentTarget)}
       className="fixed inset-0 m-0 h-dvh max-h-none w-full max-w-none border-0 bg-transparent p-0 text-slate-100 backdrop:bg-black/75 backdrop:backdrop-blur-sm"
     >
+      <p role="status" aria-atomic="true" className="sr-only">
+        {movie.title}. {watched ? 'Watched' : 'Unwatched'}.
+        {readable ? ' Story details revealed.' : ' Story details protected.'}
+      </p>
       <motion.aside
         ref={panel}
         initial={reduceMotion ? false : { x: '100%', opacity: 0 }}

@@ -99,7 +99,10 @@ export function ProgressProfile() {
       if (file.size > MAX_BACKUP_BYTES)
         throw new Error('This backup exceeds the 64 KB limit.');
       const parsed = parseWatchBackup(await file.text());
-      if (request === readId.current) setBackup(parsed);
+      if (request === readId.current) {
+        setBackup(parsed);
+        setStatus('Backup preview ready. Review the proposed additions before merging.');
+      }
     } catch (issue) {
       if (request === readId.current) {
         setError(
@@ -190,6 +193,7 @@ export function ProgressProfile() {
                   className={control}
                   onClick={() => {
                     setBackup(null);
+                    setStatus('Import cancelled. Watch progress unchanged.');
                     input.current?.focus();
                   }}
                 >

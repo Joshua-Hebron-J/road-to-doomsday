@@ -1,5 +1,7 @@
 'use client';
 
+import { trapDialogFocus } from '../lib/accessibility';
+
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
@@ -206,7 +208,7 @@ export function JourneyEngineView({
 
         {/* Sibling Pathway Switcher Pills */}
         <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0">
-          <span className="text-[11px] font-mono uppercase text-slate-500 mr-1 hidden sm:inline">
+          <span className="text-[11px] font-mono uppercase text-slate-400 mr-1 hidden sm:inline">
             Switch Track:
           </span>
           {allJourneys.map((j) => {
@@ -370,6 +372,13 @@ export function JourneyEngineView({
           </div>
         </div>
 
+        <p role="status" aria-atomic="true" className="sr-only">
+          {isLoaded
+            ? journey.title + ': ' + progress.completedCount + ' of ' +
+              progress.totalCount + ' watched. ' + progress.progressPercentage +
+              '% complete. ' + progress.formattedRemainingRuntime + ' remaining.'
+            : 'Loading journey progress.'}
+        </p>
         {/* Animated Progress Bar */}
         <div className="space-y-2">
           <div className="flex justify-between items-baseline font-mono text-xs">
@@ -382,7 +391,6 @@ export function JourneyEngineView({
             </span>
             <span
               className="text-base font-bold text-slate-100"
-              aria-live="polite"
             >
               {progress.progressPercentage}%
             </span>
@@ -412,7 +420,7 @@ export function JourneyEngineView({
         {/* Dynamic Metric Tiles */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 font-mono text-center">
           <div className="p-3 rounded-lg bg-surface-2/60 border border-white/5">
-            <span className="text-[10px] uppercase text-slate-500 block tracking-wider">
+            <span className="text-[10px] uppercase text-slate-400 block tracking-wider">
               Remaining Watch Time
             </span>
             <span className="text-base sm:text-lg font-bold text-slate-100 mt-0.5 block">
@@ -424,7 +432,7 @@ export function JourneyEngineView({
           </div>
 
           <div className="p-3 rounded-lg bg-surface-2/60 border border-white/5">
-            <span className="text-[10px] uppercase text-slate-500 block tracking-wider">
+            <span className="text-[10px] uppercase text-slate-400 block tracking-wider">
               Time Watched
             </span>
             <span className="text-base sm:text-lg font-bold text-emerald-400 mt-0.5 block">
@@ -436,7 +444,7 @@ export function JourneyEngineView({
           </div>
 
           <div className="p-3 rounded-lg bg-surface-2/60 border border-white/5">
-            <span className="text-[10px] uppercase text-slate-500 block tracking-wider">
+            <span className="text-[10px] uppercase text-slate-400 block tracking-wider">
               Essential Entries
             </span>
             <span className="text-base sm:text-lg font-bold text-slate-100 mt-0.5 block">
@@ -448,7 +456,7 @@ export function JourneyEngineView({
           </div>
 
           <div className="p-3 rounded-lg bg-surface-2/60 border border-white/5">
-            <span className="text-[10px] uppercase text-slate-500 block tracking-wider">
+            <span className="text-[10px] uppercase text-slate-400 block tracking-wider">
               Remaining Titles
             </span>
             <span className="text-base sm:text-lg font-bold text-amber-400 mt-0.5 block">
@@ -777,7 +785,12 @@ export function JourneyEngineView({
                 </h3>
                 <div
                   className="h-1 rounded bg-surface-3 overflow-hidden"
-                  aria-label={`${chapterWatched} of ${chapterMovies.length} chapter entries watched`}
+                  role="progressbar"
+                  aria-label={chapter.title + ' completion'}
+                  aria-valuemin={0}
+                  aria-valuemax={chapterMovies.length}
+                  aria-valuenow={chapterWatched}
+                  aria-valuetext={chapterWatched + ' of ' + chapterMovies.length + ' chapter entries watched'}
                 >
                   <div
                     className="h-full bg-emerald-400 transition-[width]"
@@ -854,7 +867,7 @@ export function JourneyEngineView({
                               <div className="flex-1 min-w-0 space-y-3">
                                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                                   <div className="flex items-center gap-2.5 flex-wrap">
-                                    <span className="font-mono text-xs text-slate-500 font-bold">
+                                    <span className="font-mono text-xs text-slate-400 font-bold">
                                       #{movieIdx + 1}
                                     </span>
                                     <h4
@@ -992,21 +1005,7 @@ export function JourneyEngineView({
             event.preventDefault();
             closeResetDialog();
           }}
-          onKeyDown={(event) => {
-            if (event.key !== 'Tab') return;
-            const buttons =
-              dialogRef.current?.querySelectorAll<HTMLButtonElement>('button');
-            if (!buttons?.length) return;
-            const first = buttons[0];
-            const last = buttons[buttons.length - 1];
-            if (event.shiftKey && document.activeElement === first) {
-              event.preventDefault();
-              last.focus();
-            } else if (!event.shiftKey && document.activeElement === last) {
-              event.preventDefault();
-              first.focus();
-            }
-          }}
+          onKeyDown={(event) => trapDialogFocus(event, event.currentTarget)}
           aria-modal="true"
           aria-labelledby="reset-modal-title"
           className="fixed inset-0 m-auto z-50 w-[calc(100%-2rem)] max-w-md max-h-[90dvh] overflow-y-auto bg-transparent p-0 text-slate-100 backdrop:bg-black/80 backdrop:backdrop-blur-md"
@@ -1066,7 +1065,7 @@ export function JourneyEngineView({
                   resetProgress();
                   closeResetDialog(true);
                 }}
-                className="min-h-11 w-full sm:w-auto px-4 py-2 rounded text-xs font-mono uppercase tracking-wider text-white bg-red-600 hover:bg-red-500 border border-red-400 transition-colors cursor-pointer shadow-[0_0_15px_rgba(239,68,68,0.4)] focus-ring-doom"
+                className="min-h-11 w-full sm:w-auto px-4 py-2 rounded text-xs font-mono uppercase tracking-wider text-white bg-red-600 hover:bg-red-700 border border-red-400 transition-colors cursor-pointer shadow-[0_0_15px_rgba(239,68,68,0.4)] focus-ring-doom"
               >
                 Confirm Reset
               </button>

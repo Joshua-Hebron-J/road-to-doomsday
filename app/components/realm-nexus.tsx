@@ -72,7 +72,7 @@ function RealmDiagram({
         <button
           key={realm.id}
           type="button"
-          aria-label={`Map pin: ${realm.label}`}
+          aria-label={'Map pin: ' + String(index + 1).padStart(2, '0') + ' ' + realm.label}
           aria-pressed={selected === realm.id}
           onClick={() => onSelect(realm.id)}
           className={`absolute grid min-h-11 min-w-11 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border font-mono text-sm focus-ring-doom ${selected === realm.id ? 'bg-violet-900 shadow-[0_0_24px_#8b5cf680]' : 'bg-slate-950'}`}
@@ -82,7 +82,7 @@ function RealmDiagram({
             color: realm.color,
           }}
         >
-          {String(index + 1).padStart(2, '0')}
+          <span aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>{' '}
           <span
             aria-hidden="true"
             className="absolute top-full mt-1 w-24 text-center text-[11px] leading-tight sm:w-36 sm:text-xs"

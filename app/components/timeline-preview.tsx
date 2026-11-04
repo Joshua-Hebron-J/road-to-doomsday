@@ -129,7 +129,7 @@ export function TimelinePreview() {
                     <span className="text-xs font-mono font-bold text-emerald-400 tracking-wider">
                       {era.phase}
                     </span>
-                    <span className="text-xs font-mono text-slate-500">•</span>
+                    <span className="text-xs font-mono text-slate-400">•</span>
                     <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">
                       {reveal ? era.timeframe : 'Narrative briefing protected'}
                     </span>

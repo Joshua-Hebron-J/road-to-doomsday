@@ -20,7 +20,7 @@ export default function ChooseYourPathPage() {
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
       <Header />
-      <main className="flex-1 pt-18">
+      <main id="main-content" tabIndex={-1} className="flex-1 pt-18">
         <div className="mx-auto flex max-w-6xl justify-end px-4 pt-4">
           <a href="#progress-profile" className="inline-flex min-h-11 items-center rounded-lg border border-emerald-300/35 px-4 text-sm font-semibold text-emerald-100 focus-ring-doom">
             Journey profile and backups ↓

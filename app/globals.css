@@ -96,6 +96,7 @@
 html {
   color-scheme: dark;
   scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
 }
 
 body {
@@ -104,6 +105,34 @@ body {
   font-family: var(--font-sans);
   overflow-x: hidden;
 }
+
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  transform: translateY(-200%);
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--doom-emerald-300);
+  border-radius: var(--radius-md);
+  background: var(--surface-1);
+  color: var(--foreground);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+#main-content,
+[id^="character-"] {
+  scroll-margin-top: 6rem;
+}
+
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--doom-emerald-300);
+  outline-offset: 3px;
+}
+
 
 ::selection {
   background-color: rgba(16, 185, 129, 0.35);
@@ -214,5 +243,35 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+@media (forced-colors: active) {
+  * {
+    filter: none !important;
+    backdrop-filter: none !important;
+    text-shadow: none !important;
+  }
+
+  .text-gradient-silver,
+  .text-gradient-emerald,
+  .text-gradient-gold {
+    background: none;
+    color: CanvasText;
+    -webkit-text-fill-color: CanvasText;
+  }
+
+  [role="progressbar"] {
+    border: 1px solid CanvasText;
+  }
+
+  [role="progressbar"] > div {
+    background: Highlight;
+    forced-color-adjust: none;
+  }
+
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 2px solid Highlight !important;
+    box-shadow: none;
   }
 }

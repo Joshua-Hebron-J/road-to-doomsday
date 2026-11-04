@@ -73,18 +73,18 @@ export function Footer() {
           <p className="text-slate-400 text-xs leading-relaxed font-light">
             <strong>The Road to Doomsday</strong> is an independent, non-commercial fan-created tribute and research archive designed for Marvel enthusiasts. This site is not affiliated with, endorsed by, sponsored by, or in any way associated with Marvel Studios, The Walt Disney Company, or any of their subsidiaries.
           </p>
-          <p className="text-slate-500 text-[11px] leading-relaxed font-light">
+          <p className="text-slate-400 text-[11px] leading-relaxed font-light">
             Marvel, Avengers, Doctor Doom, Fantastic Four, and all related characters, titles, logos, and story marks are registered trademarks and copyrights of Marvel Characters, Inc. and The Walt Disney Company. No copyright infringement is intended. All original commentary and architectural compilation remain under fair fan use.
           </p>
         </div>
 
         {/* Bottom Tier: Copyright & Colophon */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] font-mono text-slate-500">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] font-mono text-slate-400">
           <div>
             <span>COMMUNITY FAN PROJECT &bull; BUILT WITH NEXT.JS &bull; 2026</span>
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-slate-500">COORDINATE: EARTH-616 // EARTH-199999</span>
+            <span className="text-slate-400">COORDINATE: EARTH-616 // EARTH-199999</span>
           </div>
         </div>
       </div>

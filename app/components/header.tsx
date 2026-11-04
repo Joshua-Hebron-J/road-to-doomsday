@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
 import { ArchiveSearch } from "./archive-search";
@@ -8,10 +8,20 @@ import { Badge } from "./ui/badge";
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const menuButton = useRef<HTMLButtonElement>(null);
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/80 backdrop-blur-md">
+    <header
+      onKeyDown={(event) => {
+        if (event.key === 'Escape' && mobileMenuOpen &&
+            !(event.target instanceof Element && event.target.closest('dialog'))) {
+          event.preventDefault();
+          setMobileMenuOpen(false);
+          menuButton.current?.focus();
+        }
+      }}
+      className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/80 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
         {/* Monogram & Title */}
         <Link
@@ -34,7 +44,7 @@ export function Header() {
 
         {/* Desktop Navigation Links */}
         <nav
-          className="hidden md:flex items-center gap-8 text-xs font-medium tracking-[0.16em] uppercase text-slate-300"
+          className="hidden xl:flex items-center gap-8 text-xs font-medium tracking-[0.16em] uppercase text-slate-300"
           aria-label="Main Navigation"
         >
           <Link
@@ -65,7 +75,7 @@ export function Header() {
 
         <ArchiveSearch />
         {/* Right Status Badge */}
-        <div className="hidden sm:flex items-center gap-4">
+        <div className="hidden 2xl:flex items-center gap-4">
           <Badge variant="emerald" size="md" dot pulse>
             Incursion Timeline: Active
           </Badge>
@@ -73,10 +83,12 @@ export function Header() {
 
         {/* Mobile Hamburger Toggle */}
         <button
+          ref={menuButton}
           type="button"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden flex items-center justify-center p-2 rounded border border-white/10 text-slate-400 hover:text-white hover:border-emerald-500/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 cursor-pointer"
+          className="xl:hidden min-h-11 min-w-11 flex items-center justify-center p-2 rounded border border-white/10 text-slate-400 hover:text-white hover:border-emerald-500/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 cursor-pointer"
           aria-expanded={mobileMenuOpen}
+          aria-controls="mobile-navigation"
           aria-label="Toggle navigation menu"
         >
           <svg
@@ -105,12 +117,14 @@ export function Header() {
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <motion.div
+        <motion.nav
+          id="mobile-navigation"
+          aria-label="Mobile navigation"
           initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           exit={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: -8 }}
           transition={{ duration: 0.18 }}
-          className="md:hidden border-b border-white/10 bg-surface-1/95 backdrop-blur-xl px-6 py-6 space-y-4"
+          className="xl:hidden border-b border-white/10 bg-surface-1/95 backdrop-blur-xl px-6 py-6 space-y-4"
         >
           <div className="flex flex-col space-y-3 text-xs uppercase tracking-[0.18em] font-medium text-slate-300">
             <Link
@@ -147,7 +161,7 @@ export function Header() {
             <span>INCURSION TIMELINE: ACTIVE</span>
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
           </div>
-        </motion.div>
+        </motion.nav>
       )}
     </header>
   );

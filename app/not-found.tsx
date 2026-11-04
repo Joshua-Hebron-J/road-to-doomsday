@@ -7,7 +7,7 @@ export default function NotFound() {
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
       <Header />
-      <main className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-32 relative overflow-hidden">
+      <main id="main-content" tabIndex={-1} className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-32 relative overflow-hidden">
         {/* Anomaly Ambient Red & Emerald Background Glow */}
         <div
           aria-hidden="true"
@@ -27,7 +27,7 @@ export default function NotFound() {
 
           {/* 404 Thematic Display */}
           <div className="space-y-2">
-            <span className="font-mono text-7xl sm:text-9xl font-black tracking-widest text-slate-700/60 block select-none">
+            <span className="font-mono text-7xl sm:text-9xl font-black tracking-widest text-slate-400 block select-none">
               404
             </span>
             <h1 className="text-2xl sm:text-4xl font-extrabold uppercase tracking-wide text-slate-100">
@@ -44,15 +44,15 @@ export default function NotFound() {
           {/* Technical readout box */}
           <div className="p-4 rounded-lg bg-surface-1/70 border border-white/5 font-mono text-xs text-left max-w-md mx-auto space-y-1 text-slate-400">
             <div className="flex justify-between">
-              <span className="text-slate-500">SECTOR STATUS:</span>
+              <span className="text-slate-400">SECTOR STATUS:</span>
               <span className="text-red-400 font-bold">UNSTABLE / VOID</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-500">COORDINATE:</span>
+              <span className="text-slate-400">COORDINATE:</span>
               <span className="text-slate-300">EARTH-NULL-ERROR</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-500">RECOMMENDED ACTION:</span>
+              <span className="text-slate-400">RECOMMENDED ACTION:</span>
               <span className="text-emerald-400">RE-ANCHOR TO CANONICAL PATH</span>
             </div>
           </div>

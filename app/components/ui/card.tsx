@@ -112,7 +112,7 @@ export function CardFooter({
 }) {
   return (
     <div
-      className={`mt-6 pt-5 border-t border-white/5 flex items-center justify-between text-xs font-mono text-slate-500 ${className}`}
+      className={`mt-6 pt-5 border-t border-white/5 flex items-center justify-between text-xs font-mono text-slate-400 ${className}`}
     >
       {children}
     </div>

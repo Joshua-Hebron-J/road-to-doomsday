@@ -48,6 +48,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground font-sans selection:bg-emerald-900/60 selection:text-emerald-100">
+        <a href="#main-content" className="skip-link">Skip to main content</a>
         {children}
         <AmbienceControls />
       </body>

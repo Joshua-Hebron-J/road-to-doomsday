@@ -116,7 +116,7 @@ export function PathwaysPreview() {
                 {stats && (
                   <div className="grid grid-cols-3 gap-3 p-4 rounded-lg bg-surface-1/80 border border-white/5 font-mono text-center">
                     <div>
-                      <span className="text-[10px] text-slate-500 uppercase tracking-wider block">
+                      <span className="text-[10px] text-slate-400 uppercase tracking-wider block">
                         Estimated Runtime
                       </span>
                       <span className="text-sm sm:text-base font-bold text-slate-200 mt-0.5 block">
@@ -124,7 +124,7 @@ export function PathwaysPreview() {
                       </span>
                     </div>
                     <div className="border-x border-white/5">
-                      <span className="text-[10px] text-slate-500 uppercase tracking-wider block">
+                      <span className="text-[10px] text-slate-400 uppercase tracking-wider block">
                         Total Entries
                       </span>
                       <span className="text-sm sm:text-base font-bold text-emerald-400 mt-0.5 block">
@@ -132,7 +132,7 @@ export function PathwaysPreview() {
                       </span>
                     </div>
                     <div>
-                      <span className="text-[10px] text-slate-500 uppercase tracking-wider block">
+                      <span className="text-[10px] text-slate-400 uppercase tracking-wider block">
                         Structure
                       </span>
                       <span className="text-sm sm:text-base font-bold text-slate-200 mt-0.5 block">
@@ -221,7 +221,7 @@ export function PathwaysPreview() {
                       Compare All Pathways
                     </Button>
                   </div>
-                  <div className="flex items-center justify-between text-xs font-mono text-slate-500 pt-2 border-t border-white/5">
+                  <div className="flex items-center justify-between text-xs font-mono text-slate-400 pt-2 border-t border-white/5">
                     <span>SECTOR STATUS: READY FOR EXPLORATION</span>
                     <Badge
                       variant={getAccentBadgeVariant(current.accent)}
