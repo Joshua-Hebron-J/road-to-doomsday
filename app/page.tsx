@@ -8,6 +8,7 @@ import { VariantTracker } from "./components/variant-tracker";
 import { DoomCodex } from "./components/doom-codex";
 import { TvaArchive } from "./components/tva-archive";
 import { RealmNexus } from "./components/realm-nexus";
+import { ReleaseCountdown } from "./components/release-countdown";
 import { Footer } from "./components/footer";
 
 export default function Home() {
@@ -16,6 +17,7 @@ export default function Home() {
       <Header />
       <main id="main-content" tabIndex={-1} className="flex-1 flex flex-col">
         <Hero />
+        <ReleaseCountdown />
         <Pillars />
         <PathwaysPreview />
         <TimelinePreview />

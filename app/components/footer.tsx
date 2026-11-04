@@ -5,7 +5,11 @@ import { Badge } from "./ui/badge";
 
 export function Footer() {
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    document.getElementById('main-content')?.focus({ preventScroll: true });
+    window.scrollTo({
+      top: 0,
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+    });
   };
 
   return (
@@ -23,7 +27,7 @@ export function Footer() {
               </span>
               <div className="mt-0.5">
                 <Badge variant="emerald" size="sm">
-                  Phase 4: Choose Your Path // Active
+                  Every story led here.
                 </Badge>
               </div>
             </div>
@@ -53,6 +57,9 @@ export function Footer() {
               className="hover:text-emerald-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:rounded-sm"
             >
               Chronology
+            </Link>
+            <Link href="/#countdown" className="inline-flex min-h-11 items-center hover:text-emerald-300 focus-ring-doom">
+              Release countdown
             </Link>
             <button
               type="button"

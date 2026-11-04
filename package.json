@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "test:a11y": "node scripts/a11y-audit.mjs",
+    "test:release": "node scripts/release-audit.mjs",
     "postbuild": "node scripts/build-offline.mjs"
   },
   "dependencies": {
