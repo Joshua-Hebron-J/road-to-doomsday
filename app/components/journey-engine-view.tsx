@@ -12,6 +12,7 @@ import { Button } from './ui/button';
 import { useWatchProgress } from '../hooks/use-watch-progress';
 import { getAllJourneys, getChapterMovies, getMovieById } from '../lib/journey';
 
+const JourneySharing = dynamic(() => import('./journey-sharing'));
 const MovieDossier = dynamic(() => import('./movie-dossier'));
 const PrerequisiteLineage = dynamic(() => import('./prerequisite-lineage'), {
   loading: () => (
@@ -31,6 +32,7 @@ export function JourneyEngineView({
   chapters,
 }: JourneyEngineViewProps) {
   const allJourneys = getAllJourneys();
+  const [showSharing, setShowSharing] = useState(false);
   const [showLineage, setShowLineage] = useState(false);
   const [dossierId, setDossierId] = useState<string | null>(null);
   const dossierTrigger = useRef<HTMLElement | null>(null);
@@ -654,6 +656,17 @@ export function JourneyEngineView({
               suspended={dossierId !== null || showResetModal}
             />
           )}
+        </div>
+      </section>
+
+      <section aria-labelledby="journey-sharing-title" className="mb-8 rounded-2xl border border-emerald-300/20 bg-[radial-gradient(ellipse_at_top_left,#12302b,#080b12_70%)] p-4 sm:p-6">
+        <p className="font-mono text-xs uppercase tracking-widest text-emerald-300">Your story / beyond the archive</p>
+        <h2 id="journey-sharing-title" className="mt-2 text-2xl font-bold">Carry your journey</h2>
+        <button type="button" aria-expanded={showSharing} aria-controls="journey-sharing-studio" onClick={() => setShowSharing(!showSharing)} className="mt-4 min-h-11 rounded-lg border border-emerald-300/35 px-4 text-sm text-emerald-100 focus-ring-doom">
+          {showSharing ? "Close sharing studio" : "Open sharing studio"}
+        </button>
+        <div id="journey-sharing-studio">
+          {showSharing && <JourneySharing journeyId={journey.id} />}
         </div>
       </section>
 
