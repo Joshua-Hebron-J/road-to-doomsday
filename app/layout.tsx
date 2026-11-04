@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import OfflineArchive from "./components/offline-archive";
 import AmbienceControls from "./components/ambience-controls";
 import "./globals.css";
 
@@ -22,6 +23,7 @@ export const metadata: Metadata = {
   title: "The Road to Doomsday | Cinematic Marvel Fan Archive",
   description:
     "An unofficial cinematic roadmap chronicling the pivotal Marvel chapters, multiverse incursions, and sovereign ascent leading to Avengers: Doomsday.",
+  icons: { icon: "/pwa/icon.svg", apple: "/pwa/icon-180.png" },
   keywords: [
     "Marvel",
     "Avengers Doomsday",
@@ -51,6 +53,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <a href="#main-content" className="skip-link">Skip to main content</a>
         {children}
         <AmbienceControls />
+        <OfflineArchive />
       </body>
     </html>
   );

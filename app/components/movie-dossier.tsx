@@ -12,6 +12,7 @@ import { Badge } from './ui/badge';
 
 interface Props {
   movieId: string;
+  returnFocus?: HTMLElement | null;
   journey: Journey;
   spoilerShield: boolean;
   onSelect: (id: string) => void;
@@ -20,6 +21,7 @@ interface Props {
 
 export default function MovieDossier({
   movieId,
+  returnFocus,
   journey,
   spoilerShield,
   onSelect,
@@ -42,7 +44,7 @@ export default function MovieDossier({
 
   useEffect(() => {
     const element = dialog.current;
-    const previousFocus = document.activeElement;
+    const previousFocus = returnFocus ?? document.activeElement;
     const overflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     element?.showModal();
@@ -53,7 +55,7 @@ export default function MovieDossier({
       if (previousFocus instanceof HTMLElement && previousFocus.isConnected)
         previousFocus.focus({ preventScroll: true });
     };
-  }, []);
+  }, [returnFocus]);
 
   useEffect(() => {
     if (previousMovie.current === movieId) return;
